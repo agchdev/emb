@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Roboto_Flex } from "next/font/google";
-import ClickSpark from "@/components/ClickSpark";
 
 const robotoFlex = Roboto_Flex({
   subsets: ["latin"],
@@ -29,15 +28,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={robotoFlex.variable + " antialiased bg-[#0b0813]"}>
-        <ClickSpark
-          sparkColor='#fff'
-          sparkSize={10}
-          sparkRadius={15}
-          sparkCount={8}
-          duration={400}
-        >
+        <div>
+          
+        </div>
+        <div>
           {children}
-        </ClickSpark>
+        </div>
       </body>
     </html>
   );
