@@ -1,13 +1,14 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Roboto_Flex } from "next/font/google";
+import Header from "@/components/Header";
+import { Roboto_Slab } from "next/font/google"
 
-const robotoFlex = Roboto_Flex({
+const robotoSlab = Roboto_Slab({
   subsets: ["latin"],
-  axes: ["wght", "opsz"], // importante para variaciones
-  variable: "--font-roboto-flex",
   display: "swap",
-});
+  variable: "--font-roboto-slab",
+})
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,10 +28,22 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={robotoFlex.variable + " antialiased bg-[#0b0813]"}>
-        <div>
-          
+      <body className={robotoSlab.variable + " antialiased bg-[#0b0813]"}>
+        <div className="relative border h-[100vh]">
+          <div className="absolute bottom-5 right-5 rotate-180">
+            <svg width="20" height="20" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="10" y1="0.5" x2="-4.15258e-08" y2="0.499999" stroke="white"></line>
+              <line x1="0.5" y1="10" x2="0.500001" y2="-6.55671e-08" stroke="white"></line>
+            </svg>
+          </div>
+          <div className="absolute bottom-5 left-5 rotate-90">
+            <svg width="20" height="20" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="10" y1="0.5" x2="-4.15258e-08" y2="0.499999" stroke="white"></line>
+              <line x1="0.5" y1="10" x2="0.500001" y2="-6.55671e-08" stroke="white"></line>
+            </svg>
+          </div>
         </div>
+        <Header/>
         <div>
           {children}
         </div>
