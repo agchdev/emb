@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={robotoSlab.variable + " antialiased bg-[#0b0813]"}>
-        <div className="relative border h-[100vh]">
+        <div className="relative h-[100vh]">
           <div className="absolute bottom-5 right-5 rotate-180">
             <svg width="20" height="20" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <line x1="10" y1="0.5" x2="-4.15258e-08" y2="0.499999" stroke="white"></line>
