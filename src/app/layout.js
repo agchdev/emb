@@ -29,21 +29,49 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={robotoSlab.variable + " antialiased bg-[#0b0813]"}>
-        <div className="relative h-[100vh]">
-          <div className="absolute bottom-5 right-5 rotate-180">
-            <svg width="20" height="20" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {/* ONLY DESKTOP */}
+        <div className="absolute w-full hidden lg:block">
+          <div className="absolute h-[100vh] flex items-center left-5">
+            <svg width="10" height="20" viewBox="0 0 10 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="10" y1="10.5" x2="-4.15258e-08" y2="10.5" stroke="white"></line>
+              <line x1="0.5" y1="20" x2="0.499999" y2="2.18557e-08" stroke="white"></line>
+            </svg>
+          </div>
+          <div className="absolute h-[100vh] flex items-center right-5 rotate-180">
+            <svg width="10" height="20" viewBox="0 0 10 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="10" y1="10.5" x2="-4.15258e-08" y2="10.5" stroke="white"></line>
+              <line x1="0.5" y1="20" x2="0.499999" y2="2.18557e-08" stroke="white"></line>
+            </svg>
+          </div>
+          <div className="absolute top-5 right-5 rotate-90">
+            <svg width="10" height="20" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <line x1="10" y1="0.5" x2="-4.15258e-08" y2="0.499999" stroke="white"></line>
               <line x1="0.5" y1="10" x2="0.500001" y2="-6.55671e-08" stroke="white"></line>
             </svg>
           </div>
-          <div className="absolute bottom-5 left-5 rotate-90">
-            <svg width="20" height="20" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className="absolute top-5 left-5">
+            <svg width="10" height="20" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
               <line x1="10" y1="0.5" x2="-4.15258e-08" y2="0.499999" stroke="white"></line>
               <line x1="0.5" y1="10" x2="0.500001" y2="-6.55671e-08" stroke="white"></line>
             </svg>
           </div>
         </div>
-        <Header/>
+        {/* MOBILE AND DESKTOP ALWAYS */}
+        <div className="absolute w-full h-[100vh]">
+          <div className="absolute bottom-5 right-5 rotate-180">
+            <svg width="10" height="20" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="10" y1="0.5" x2="-4.15258e-08" y2="0.499999" stroke="white"></line>
+              <line x1="0.5" y1="10" x2="0.500001" y2="-6.55671e-08" stroke="white"></line>
+            </svg>
+          </div>
+          <div className="absolute bottom-5 left-5 -rotate-90">
+            <svg width="10" height="20" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="10" y1="0.5" x2="-4.15258e-08" y2="0.499999" stroke="white"></line>
+              <line x1="0.5" y1="10" x2="0.500001" y2="-6.55671e-08" stroke="white"></line>
+            </svg>
+          </div>
+        </div>
+        <Header />
         <div>
           {children}
         </div>
