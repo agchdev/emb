@@ -81,6 +81,9 @@ export default function RootLayout({ children }) {
         <div className="hidden lg:block absolute z-1 top-80 left-30">
           <SystemStats loaded={4} total={28} />
         </div>
+        <div className="hidden lg:block absolute z-1 bottom-10 right-40">
+          <SystemStats loaded={4} total={28} />
+        </div>
         <div className="hidden lg:block">
           <img
             src="/picto3.webp"
@@ -100,7 +103,17 @@ export default function RootLayout({ children }) {
           <img
             src="/picto1.webp"
             alt="Fondo"
-            className="object-cover absolute bottom-30 right-60 w-5 opacity-30"
+            className="object-cover absolute top-30 right-40 w-5 opacity-30"
+          />
+          <img
+            src="/picto1.webp"
+            alt="Fondo"
+            className="object-cover absolute bottom-30 right-100 w-5 opacity-30"
+          />
+          <img
+            src="/picto1.webp"
+            alt="Fondo"
+            className="object-cover absolute bottom-50 right-30 w-5 opacity-30"
           />
           <img
             src="/picto2.webp"

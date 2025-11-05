@@ -83,7 +83,7 @@ export default function SystemStats({ loaded = 4, total = 28 }) {
   }, [])
 
   return (
-    <div className="font-mono text-[8px] tracking-widest text-white/70 space-y-4">
+    <div className="font-mono text-[8px] tracking-widest text-white/30 space-y-4">
       <div>
         <div>PAR SING DATA</div>
         <div className="opacity-50">----------------</div>
