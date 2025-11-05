@@ -3,7 +3,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import { Roboto_Slab } from "next/font/google"
 import MouseStats from "@/components/MouseStats";
-import Image from "next/image";
+import Noise from "@/components/Noise";
+import SystemStats from "@/components/SystemStats";
 
 const robotoSlab = Roboto_Slab({
   subsets: ["latin"],
@@ -77,13 +78,56 @@ export default function RootLayout({ children }) {
         <div>
           {children}
         </div>
-        <div className="absolute top-0 -z-10 w-full h-[100vh] bg-white">
+        <div className="hidden lg:block absolute z-1 top-80 left-30">
+          <SystemStats loaded={4} total={28} />
+        </div>
+        <div className="hidden lg:block">
           <img
-            src="/bg.jpg"       // NO se pone 'public'
-            alt="Logo"
-            className="w-full h-full "
+            src="/picto3.webp"
+            alt="Fondo"
+            className="object-cover absolute top-20 left-68 w-5 opacity-30"
+          />
+          <img
+            src="/picto3.webp"
+            alt="Fondo"
+            className="object-cover absolute top-100 left-100 w-5 opacity-30"
+          />
+          <img
+            src="/picto1.webp"
+            alt="Fondo"
+            className="object-cover absolute bottom-40 left-40 w-5 opacity-30"
+          />
+          <img
+            src="/picto1.webp"
+            alt="Fondo"
+            className="object-cover absolute bottom-30 right-60 w-5 opacity-30"
+          />
+          <img
+            src="/picto2.webp"
+            alt="Fondo"
+            className="object-cover absolute top-16 left-90 w-4 opacity-30"
+          />
+          <img
+            src="/picto2.webp"
+            alt="Fondo"
+            className="object-cover absolute top-100 left-90 w-4 opacity-30"
           />
         </div>
+        <div className="absolute top-0 -z-10 w-full h-[100vh] bg-white">
+          <img
+            src="/bg.jpg"
+            alt="Fondo"
+            className="w-full h-full object-cover object-center"
+          />
+          <Noise
+            patternSize={50}
+            patternScaleX={1}
+            patternScaleY={1}
+            patternRefreshInterval={2}
+            patternAlpha={30}
+          />
+        </div>
+
       </body>
     </html>
   );
