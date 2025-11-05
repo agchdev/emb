@@ -1,8 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Roboto_Flex } from "next/font/google";
 import Header from "@/components/Header";
 import { Roboto_Slab } from "next/font/google"
+import MouseStats from "@/components/MouseStats";
+import Image from "next/image";
 
 const robotoSlab = Roboto_Slab({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={robotoSlab.variable + " antialiased bg-[#0b0813]"}>
+        <div className="hidden lg:block"><MouseStats /></div>
         {/* ONLY DESKTOP */}
         <div className="absolute w-full hidden lg:block">
           <div className="absolute h-[100vh] flex items-center left-5">
@@ -74,6 +76,13 @@ export default function RootLayout({ children }) {
         <Header />
         <div>
           {children}
+        </div>
+        <div className="absolute top-0 -z-10 w-full h-[100vh] bg-white">
+          <img
+            src="/bg.jpg"       // NO se pone 'public'
+            alt="Logo"
+            className="w-full h-full "
+          />
         </div>
       </body>
     </html>
