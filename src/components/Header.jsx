@@ -1,3 +1,5 @@
+
+
 "use client"
 import Link from "next/link"
 // 👇 añade useRef
@@ -71,7 +73,7 @@ const Header = () => {
   return (
     <div className="w-full h-[100vh] flex items-center justify-center">
       {/* mismas clases que ya tenías */}
-      <header className="absolute top-5 left-5 lg:top-0 lg:left-0 lg:relative text-white bg-white/30 py-2 px-3 w-56">
+      <header className="absolute top-5 left-5 lg:top-0 lg:left-0 lg:relative text-white bg-white/30 py-2 px-3 w-56 opacity-50 backdrop-blur-3xl">
         <button
           className="text-start w-full"
           onClick={() => setOpen(v => !v)}

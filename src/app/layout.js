@@ -5,6 +5,7 @@ import { Roboto_Slab } from "next/font/google"
 import MouseStats from "@/components/MouseStats";
 import Noise from "@/components/Noise";
 import SystemStats from "@/components/SystemStats";
+import BgVideo from "@/components/BgVideo";
 
 const robotoSlab = Roboto_Slab({
   subsets: ["latin"],
@@ -75,6 +76,7 @@ export default function RootLayout({ children }) {
           </div>
         </div>
         <Header />
+        <BgVideo />
         <div>
           {children}
         </div>
@@ -126,19 +128,24 @@ export default function RootLayout({ children }) {
             className="object-cover absolute top-100 left-90 w-4 opacity-30"
           />
         </div>
-        <div className="absolute top-0 -z-10 w-full h-[100vh] bg-white">
-          <img
+        <div className="absolute top-0 -z-10 w-full h-[100vh] bg-white brightness-100">
+          <img 
             src="/bg.jpg"
             alt="Fondo"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-center brightness-150 mix-blend-multiply"
           />
-          <Noise
-            patternSize={50}
-            patternScaleX={1}
-            patternScaleY={1}
-            patternRefreshInterval={2}
-            patternAlpha={30}
-          />
+        </div>
+        <div className="absolute top-0 -z-10 w-full h-[100vh]">
+          <div className="absolute top-0 w-full overflow-hidden h-[100vh] mask-[url(/cubo.png)] mask-size-[.2%]">
+            <Noise
+              patternSize={50}
+              patternScaleX={1}
+              patternScaleY={1}
+              patternRefreshInterval={2}
+              patternAlpha={30}
+            />
+          </div>
+
         </div>
 
       </body>
