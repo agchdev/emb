@@ -71,9 +71,9 @@ const Header = () => {
   }
 
   return (
-    <div className="w-full h-[100vh] flex items-center justify-center">
+    <div className="w-full h-screen flex items-center justify-center">
       {/* mismas clases que ya tenías */}
-      <header className="absolute top-5 left-5 lg:top-0 lg:left-0 lg:relative text-white bg-white/30 py-2 px-3 w-56 opacity-50 backdrop-blur-3xl">
+      <header className="absolute top-5 left-5 lg:top-0 lg:left-0 lg:relative text-white bg-white/30 py-2 px-3 w-56 opacity-50 backdrop-blur-3xl z-[999]">
         <button
           className="text-start w-full"
           onClick={() => setOpen(v => !v)}
@@ -92,7 +92,7 @@ const Header = () => {
         {open && (
           <div
             id="nav-rutas"
-            className="mt-3 text-sm text-start lg:absolute lg:left-0 lg:top-full lg:mt-0 lg:w-full lg:bg-white/30 "
+            className="mt-3 text-sm text-start lg:absolute lg:left-0 lg:top-full lg:mt-0 lg:w-full lg:bg-white/30 z-[999]"
           >
             {rutas.slice(0, visibleCount).map((ruta) => {
               const isActive = currentRoute === ruta

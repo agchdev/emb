@@ -134,7 +134,7 @@ export default function BgVideo() {
   }
 
   return (
-    <div ref={wrapRef} className="absolute top-0 w-full h-[100vh] overflow-hidden ">
+    <div ref={wrapRef} className="absolute top-0 w-full h-[100vh] overflow-hidden z-0">
       {/* Capa por máscara: mismo vídeo, distinta máscara (ancho/alto en px) */}
       {masks.map((m) => {
         const wPx = (wrapRect.w * m.wPct) / 100
@@ -142,7 +142,7 @@ export default function BgVideo() {
         return (
           <div
             key={`layer-${m.id}`}
-            className="absolute inset-0 select-none"
+            className="absolute inset-0 select-none pointer-events-none"
             style={{
               maskImage: `url(${m.image})`,
               WebkitMaskImage: `url(${m.image})`,
@@ -176,7 +176,7 @@ export default function BgVideo() {
           <div
             key={`handle-${m.id}`}
             onPointerDown={onHandlePointerDown(m.id)}
-            className="absolute touch-none cursor-grab active:cursor-grabbing box-border border border-white/70"
+            className="absolute touch-none cursor-grab active:cursor-grabbing box-border border border-white/70 z-20"
             style={{
               left: m.x,
               top: m.y,
