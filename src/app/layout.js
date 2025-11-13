@@ -31,7 +31,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={robotoSlab.variable + " antialiased bg-[#0b0813]"}>
+      <body className={`${robotoSlab.variable} ${geistMono.variable} antialiased bg-[#0b0813]`}>
         <div className="hidden lg:block"><MouseStats /></div>
         {/* ONLY DESKTOP */}
         <div className="absolute w-full hidden lg:block">
@@ -77,6 +77,18 @@ export default function RootLayout({ children }) {
         </div>
         <Header />
         <BgVideo />
+        
+        {/* Texto técnico de fondo superior central */}
+        <div className="hidden lg:block absolute top-32 left-1/2 -translate-x-1/2 z-10 pointer-events-none select-none">
+          <div className="font-mono text-[11px] text-white/25 tracking-wider leading-relaxed text-center">
+            <div className="-mb-2">VIDEO_ID / AAN_GM1GN2GFEA2GA / POKE_XERK_VVYC</div>
+            <div className="-mb-2">VIEWPORT / FRAMES 1920X1080*1.20 - 0 DROPPED OF 80GEN</div>
+            <div className="-mb-2">CLIPPING / PIXEL_COORDINATES / 1920:1080@60 / 0BNG2X12L9M825</div>
+            <div className="-mb-2">VOLUME / NORMALIZED 100% / 100% [CONTENT_LOUDNESS -25.8DB]</div>
+            <div>CODECS MV1A 2.8:665:15:0 / OPUS [20]</div>
+          </div>
+        </div>
+
         <div>
           {children}
         </div>

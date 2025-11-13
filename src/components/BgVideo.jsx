@@ -3,12 +3,11 @@ import React, { useLayoutEffect, useRef, useState } from 'react'
 
 const MASK_IMAGE = '/rect.png'
 
-// 4 máscaras con tamaños un poco más grandes
+// 3 máscaras según la referencia
 const MASK_TEMPLATES = [
-  { id: 1, wPct: 15, hPct: 24, image: '/rect.png' },
-  { id: 2, wPct: 30, hPct: 15, image: '/rect.png' },
-  { id: 3, wPct: 22, hPct: 35, image: '/rect.png' },
-  { id: 4, wPct: 38, hPct: 26, image: '/rect.png' },
+  { id: 1, wPct: 13, hPct: 26, image: '/rect.png' }, // pequeña arriba izquierda
+  { id: 2, wPct: 48, hPct: 42, image: '/rect.png' }, // grande centro-derecha
+  { id: 3, wPct: 22, hPct: 36, image: '/rect.png' }, // mediana abajo izquierda
 ]
 
 
@@ -106,22 +105,35 @@ export default function BgVideo() {
         )
       })}
 
-      {/* Handle: borde pegado (sin margen); coincide con la máscara */}
+      {/* Handle con coordenadas */}
       {masks.map((m) => {
         const wPx = (wrapRect.w * m.wPct) / 100
         const hPx = (wrapRect.h * m.hPct) / 100
+        const xCoord = Math.round(m.x).toString().padStart(5, '0')
+        const yCoord = Math.round(m.y).toString().padStart(5, '0')
         return (
           <div
             key={`handle-${m.id}`}
-            onPointerDown={onHandlePointerDown(m.id)}
-            className="absolute touch-none cursor-grab active:cursor-grabbing box-border border border-white/70 z-20"
+            className="absolute z-20"
             style={{
               left: m.x,
               top: m.y,
-              width: wPx,
-              height: hPx,
             }}
-          />
+          >
+            {/* Coordenadas arriba */}
+            <div className="absolute -top-[24px] -left-[.5px] text-white text-[13px] tracking-[.15em] font-mono uppercase select-none pointer-events-none bg-gray-500/60 px-2 py-0.5 rounded-sm drop-shadow-[0_0_3px_rgba(255,255,255,0.8)]">
+              X:{xCoord}PX    Y:{yCoord}PX
+            </div>
+            {/* Borde draggable */}
+            <div
+              onPointerDown={onHandlePointerDown(m.id)}
+              className="touch-none cursor-grab active:cursor-grabbing box-border border border-white/70"
+              style={{
+                width: wPx,
+                height: hPx,
+              }}
+            />
+          </div>
         )
       })}
     </div>
@@ -132,12 +144,11 @@ export default function BgVideo() {
 
 function placeInitialMasks(templates, rect) {
   const zones = [
-    { fx: 0.08, fy: 0.10 }, // top-left
-    { fx: 0.70, fy: 0.12 }, // top-right
-    { fx: 0.12, fy: 0.55 }, // center-left
-    { fx: 0.62, fy: 0.60 }, // bottom-right
+    { fx: 0.07, fy: 0.09 }, // pequeña arriba izquierda
+    { fx: 0.38, fy: 0.12 }, // grande centro-derecha
+    { fx: 0.11, fy: 0.52 }, // mediana abajo izquierda
   ]
-  return templates.slice(0, 4).map((t, i) => {
+  return templates.slice(0, 3).map((t, i) => {
     const wPx = (rect.w * t.wPct) / 100
     const hPx = (rect.h * t.hPct) / 100
     const x = clamp(rect.w * zones[i].fx, 0, Math.max(0, rect.w - wPx))
