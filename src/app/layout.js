@@ -6,6 +6,7 @@ import MouseStats from "@/components/MouseStats";
 import Noise from "@/components/Noise";
 import SystemStats from "@/components/SystemStats";
 import BgVideo from "@/components/BgVideo";
+// import EmbLogo from "@/components/EmbLogo";
 
 const robotoSlab = Roboto_Slab({
   subsets: ["latin"],
@@ -77,6 +78,11 @@ export default function RootLayout({ children }) {
         </div>
         <Header />
         <BgVideo />
+        
+        {/* Logo EMB superior central */}
+        {/* <div className="hidden lg:block absolute top-8 left-1/2 -translate-x-1/2 z-10 pointer-events-none select-none">
+          <EmbLogo className="w-16 h-auto drop-shadow-[0_0_20px_rgba(147,51,234,0.7)]" />
+        </div> */}
         
         {/* Texto técnico de fondo superior central */}
         <div className="hidden lg:block absolute top-32 left-1/2 -translate-x-1/2 z-10 pointer-events-none select-none">

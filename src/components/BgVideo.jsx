@@ -3,11 +3,14 @@ import React, { useLayoutEffect, useRef, useState } from 'react'
 
 const MASK_IMAGE = '/rect.png'
 
-// 3 máscaras según la referencia
+// 6 máscaras según la referencia
 const MASK_TEMPLATES = [
-  { id: 1, wPct: 13, hPct: 26, image: '/rect.png' }, // pequeña arriba izquierda
-  { id: 2, wPct: 48, hPct: 42, image: '/rect.png' }, // grande centro-derecha
-  { id: 3, wPct: 22, hPct: 36, image: '/rect.png' }, // mediana abajo izquierda
+  { id: 1, wPct: 32, hPct: 42, image: '/rect.png' }, // pequeña arriba izquierda
+  { id: 2, wPct: 55, hPct: 75, image: '/rect.png' }, // grande centro-arriba
+  { id: 3, wPct: 15, hPct: 24, image: '/rect.png' }, // pequeña arriba derecha
+  { id: 4, wPct: 15, hPct: 28, image: '/rect.png' }, // mediana medio-izquierda
+  { id: 5, wPct: 28, hPct: 38, image: '/rect.png' }, // mediana-grande centro
+  { id: 6, wPct: 14, hPct: 20, image: '/rect.png' }, // pequeña abajo derecha
 ]
 
 
@@ -121,13 +124,13 @@ export default function BgVideo() {
             }}
           >
             {/* Coordenadas arriba */}
-            <div className="absolute -top-[24px] -left-[.5px] text-white text-[13px] tracking-[.15em] font-mono uppercase select-none pointer-events-none bg-gray-500/60 px-2 py-0.5 rounded-sm drop-shadow-[0_0_3px_rgba(255,255,255,0.8)]">
+            <div className="absolute -top-[21px] -left-[.5px] text-white text-[11px] tracking-[.15em] font-mono uppercase select-none pointer-events-none bg-gray-500/60 px-2 py-0.5 rounded-sm drop-shadow-[0_0_3px_rgba(255,255,255,0.8)]">
               X:{xCoord}PX    Y:{yCoord}PX
             </div>
             {/* Borde draggable */}
             <div
               onPointerDown={onHandlePointerDown(m.id)}
-              className="touch-none cursor-grab active:cursor-grabbing box-border border border-white/70"
+              className="touch-none cursor-grab active:cursor-grabbing box-border border border-white/40"
               style={{
                 width: wPx,
                 height: hPx,
@@ -144,11 +147,14 @@ export default function BgVideo() {
 
 function placeInitialMasks(templates, rect) {
   const zones = [
-    { fx: 0.07, fy: 0.09 }, // pequeña arriba izquierda
-    { fx: 0.38, fy: 0.12 }, // grande centro-derecha
-    { fx: 0.11, fy: 0.52 }, // mediana abajo izquierda
+    { fx: 0.12, fy: 0.14 },  // pequeña arriba izquierda
+    { fx: 0.37, fy: 0.19 },  // grande centro-arriba
+    { fx: 0.75, fy: 0.15 },  // pequeña arriba derecha
+    { fx: 0.13, fy: 0.55 },  // mediana medio-izquierda
+    { fx: 0.20, fy: 0.60 },  // mediana-grande centro
+    { fx: 0.25, fy: 0.40 },  // pequeña abajo derecha
   ]
-  return templates.slice(0, 3).map((t, i) => {
+  return templates.map((t, i) => {
     const wPx = (rect.w * t.wPct) / 100
     const hPx = (rect.h * t.hPct) / 100
     const x = clamp(rect.w * zones[i].fx, 0, Math.max(0, rect.w - wPx))
