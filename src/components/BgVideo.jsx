@@ -19,6 +19,8 @@ export default function BgVideo() {
   const [wrapRect, setWrapRect] = useState({ w: 0, h: 0, left: 0, top: 0 })
   const [masks, setMasks] = useState([])
   const dragRef = useRef(null)
+  const videoRefs = useRef({})
+  const masterVideoRef = useRef(null)
 
   useLayoutEffect(() => {
     const measure = () => {
@@ -36,6 +38,68 @@ export default function BgVideo() {
     return () => window.removeEventListener('resize', measure)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Sincronización de videos mejorada
+  useLayoutEffect(() => {
+    const master = masterVideoRef.current
+    if (!master || masks.length === 0) return
+
+    let syncInterval
+    let hasStarted = false
+
+    const startSync = () => {
+      if (syncInterval) return
+      
+      // Sincronización cada 100ms
+      syncInterval = setInterval(() => {
+        if (!master.paused) {
+          const masterTime = master.currentTime
+          Object.values(videoRefs.current).forEach((video) => {
+            if (video && !video.paused && video.readyState >= 2) {
+              const diff = Math.abs(video.currentTime - masterTime)
+              if (diff > 0.1) {
+                video.currentTime = masterTime
+              }
+            }
+          })
+        }
+      }, 100)
+    }
+
+    const initVideos = () => {
+      if (hasStarted) return
+      
+      const allVideos = Object.values(videoRefs.current)
+      if (allVideos.length < masks.length) return
+      
+      const allReady = allVideos.every(v => v && v.readyState >= 2)
+      
+      if (allReady && !hasStarted) {
+        hasStarted = true
+        
+        // Iniciar todos desde cero
+        allVideos.forEach(video => {
+          video.currentTime = 0
+          video.play().catch(() => {})
+        })
+        
+        startSync()
+      }
+    }
+
+    // Intentar iniciar cuando todos estén listos
+    const checkInterval = setInterval(() => {
+      if (!hasStarted) initVideos()
+      else clearInterval(checkInterval)
+    }, 100)
+
+    setTimeout(() => clearInterval(checkInterval), 5000)
+
+    return () => {
+      clearInterval(checkInterval)
+      if (syncInterval) clearInterval(syncInterval)
+    }
+  }, [masks.length])
 
   const onHandlePointerDown = (maskId) => (e) => {
     e.preventDefault()
@@ -75,6 +139,18 @@ export default function BgVideo() {
 
   return (
     <div ref={wrapRef} className="absolute top-0 w-full h-[100vh] overflow-hidden z-0">
+      {/* Video master oculto para sincronización */}
+      <video
+        ref={masterVideoRef}
+        src="/carita.mp4"
+        className="hidden"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+      />
+      
       {/* Capa por máscara: mismo vídeo, distinta máscara (ancho/alto en px) */}
       {masks.map((m) => {
         const wPx = (wrapRect.w * m.wPct) / 100
@@ -97,12 +173,15 @@ export default function BgVideo() {
             }}
           >
             <video
+              ref={(el) => {
+                if (el) videoRefs.current[m.id] = el
+              }}
               src="/carita.mp4"
               className="w-full h-full object-cover pointer-events-none"
-              autoPlay
               muted
               loop
               playsInline
+              preload="auto"
             />
           </div>
         )
@@ -127,13 +206,15 @@ export default function BgVideo() {
             <div className="absolute -top-[21px] -left-[.5px] text-white text-[11px] tracking-[.15em] font-mono uppercase select-none pointer-events-none bg-gray-500/60 px-2 py-0.5 rounded-sm drop-shadow-[0_0_3px_rgba(255,255,255,0.8)]">
               X:{xCoord}PX    Y:{yCoord}PX
             </div>
-            {/* Borde draggable */}
+            {/* Borde draggable - solo el contorno sin ocupar espacio */}
             <div
               onPointerDown={onHandlePointerDown(m.id)}
-              className="touch-none cursor-grab active:cursor-grabbing box-border border border-white/40"
+              className="touch-none cursor-grab active:cursor-grabbing"
               style={{
                 width: wPx,
                 height: hPx,
+                outline: '1px solid rgba(255, 255, 255, 0.4)',
+                outlineOffset: '-1px',
               }}
             />
           </div>
