@@ -151,7 +151,7 @@ const Header = () => {
                 return (
                   <Link
                     key={ruta}
-                    href={`/${ruta}`}
+                    href={`/#${ruta.toLowerCase()}`}
                     className={`block [word-spacing:20px] p-1.5 w-full transition-colors ${
                       isActive
                         ? "bg-white text-black"
