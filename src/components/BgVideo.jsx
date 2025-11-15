@@ -138,7 +138,7 @@ export default function BgVideo() {
   }
 
   return (
-    <div ref={wrapRef} className="absolute top-0 w-full h-[100vh] overflow-hidden z-0">
+    <div ref={wrapRef} className="absolute top-0 w-full h-[100vh] z-10 overflow-hidden z-0">
       {/* Video master oculto para sincronización */}
       <video
         ref={masterVideoRef}
