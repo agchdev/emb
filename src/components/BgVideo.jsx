@@ -1,26 +1,45 @@
-'use client'
-import React, { useLayoutEffect, useRef, useState } from 'react'
+"use client"
+import React, { useLayoutEffect, useRef, useState } from "react"
 
-const MASK_IMAGE = '/rect.png'
+const MASK_IMAGE = "/rect.png"
 
 // 6 máscaras según la referencia
 const MASK_TEMPLATES = [
-  { id: 1, wPct: 32, hPct: 42, image: '/rect.png' }, // pequeña arriba izquierda
-  { id: 2, wPct: 55, hPct: 75, image: '/rect.png' }, // grande centro-arriba
-  { id: 3, wPct: 15, hPct: 24, image: '/rect.png' }, // pequeña arriba derecha
-  { id: 4, wPct: 15, hPct: 28, image: '/rect.png' }, // mediana medio-izquierda
-  { id: 5, wPct: 28, hPct: 38, image: '/rect.png' }, // mediana-grande centro
-  { id: 6, wPct: 14, hPct: 20, image: '/rect.png' }, // pequeña abajo derecha
+  { id: 1, wPct: 32, hPct: 42, image: MASK_IMAGE }, // pequeña arriba izquierda
+  { id: 2, wPct: 55, hPct: 75, image: MASK_IMAGE }, // grande centro-arriba
+  { id: 3, wPct: 15, hPct: 24, image: MASK_IMAGE }, // pequeña arriba derecha
+  { id: 4, wPct: 15, hPct: 28, image: MASK_IMAGE }, // mediana medio-izquierda
+  { id: 5, wPct: 28, hPct: 38, image: MASK_IMAGE }, // mediana-grande centro
+  { id: 6, wPct: 14, hPct: 20, image: MASK_IMAGE }, // pequeña abajo derecha
 ]
 
+// 👇 aquí decides qué vídeo poner por sección
+const VIDEO_BY_TARGET = {
+  home: "/carita.mp4",
+  uefn: "/uefn.mp4",
+  dev: "/dev.mp4",
+  music: "/music.mp4",
+  vfx: "/vfx.mp4",
+  // fallback
+  default: "/carita.mp4",
+}
 
-export default function BgVideo() {
+export default function BgVideo({ currentTarget = "home" }) {
   const wrapRef = useRef(null)
   const [wrapRect, setWrapRect] = useState({ w: 0, h: 0, left: 0, top: 0 })
   const [masks, setMasks] = useState([])
   const dragRef = useRef(null)
   const videoRefs = useRef({})
   const masterVideoRef = useRef(null)
+
+  // normalizamos el target
+  const normalized = (currentTarget || "home").toLowerCase()
+  const videoSrc = VIDEO_BY_TARGET[normalized] || VIDEO_BY_TARGET.default
+
+  // cada vez que cambia el vídeo, limpiamos refs de vídeos para no arrastrar instancias viejas
+  useLayoutEffect(() => {
+    videoRefs.current = {}
+  }, [videoSrc])
 
   useLayoutEffect(() => {
     const measure = () => {
@@ -34,8 +53,8 @@ export default function BgVideo() {
       }
     }
     measure()
-    window.addEventListener('resize', measure)
-    return () => window.removeEventListener('resize', measure)
+    window.addEventListener("resize", measure)
+    return () => window.removeEventListener("resize", measure)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -49,7 +68,7 @@ export default function BgVideo() {
 
     const startSync = () => {
       if (syncInterval) return
-      
+
       // Sincronización cada 100ms
       syncInterval = setInterval(() => {
         if (!master.paused) {
@@ -68,21 +87,21 @@ export default function BgVideo() {
 
     const initVideos = () => {
       if (hasStarted) return
-      
+
       const allVideos = Object.values(videoRefs.current)
       if (allVideos.length < masks.length) return
-      
-      const allReady = allVideos.every(v => v && v.readyState >= 2)
-      
+
+      const allReady = allVideos.every((v) => v && v.readyState >= 2)
+
       if (allReady && !hasStarted) {
         hasStarted = true
-        
+
         // Iniciar todos desde cero
-        allVideos.forEach(video => {
+        allVideos.forEach((video) => {
           video.currentTime = 0
           video.play().catch(() => {})
         })
-        
+
         startSync()
       }
     }
@@ -99,7 +118,7 @@ export default function BgVideo() {
       clearInterval(checkInterval)
       if (syncInterval) clearInterval(syncInterval)
     }
-  }, [masks.length])
+  }, [masks.length, videoSrc])
 
   const onHandlePointerDown = (maskId) => (e) => {
     e.preventDefault()
@@ -113,8 +132,8 @@ export default function BgVideo() {
       offsetY: e.clientY - handleRect.top,
     }
     e.currentTarget.setPointerCapture?.(e.pointerId)
-    window.addEventListener('pointermove', onWindowPointerMove)
-    window.addEventListener('pointerup', onWindowPointerUp, { once: true })
+    window.addEventListener("pointermove", onWindowPointerMove)
+    window.addEventListener("pointerup", onWindowPointerUp, { once: true })
   }
 
   const onWindowPointerMove = (e) => {
@@ -126,23 +145,37 @@ export default function BgVideo() {
     const wPx = (wrapRect.w * m.wPct) / 100
     const hPx = (wrapRect.h * m.hPct) / 100
 
-    const newX = clamp(e.clientX - wrapRect.left - d.offsetX, 0, Math.max(0, wrapRect.w - wPx))
-    const newY = clamp(e.clientY - wrapRect.top - d.offsetY, 0, Math.max(0, wrapRect.h - hPx))
+    const newX = clamp(
+      e.clientX - wrapRect.left - d.offsetX,
+      0,
+      Math.max(0, wrapRect.w - wPx),
+    )
+    const newY = clamp(
+      e.clientY - wrapRect.top - d.offsetY,
+      0,
+      Math.max(0, wrapRect.h - hPx),
+    )
 
-    setMasks((prev) => prev.map((mm) => (mm.id === d.id ? { ...mm, x: newX, y: newY } : mm)))
+    setMasks((prev) =>
+      prev.map((mm) => (mm.id === d.id ? { ...mm, x: newX, y: newY } : mm)),
+    )
   }
 
   const onWindowPointerUp = () => {
     dragRef.current = null
-    window.removeEventListener('pointermove', onWindowPointerMove)
+    window.removeEventListener("pointermove", onWindowPointerMove)
   }
 
   return (
-    <div ref={wrapRef} className="absolute top-0 w-full h-[100vh] z-10 overflow-hidden z-0">
+    <div
+      ref={wrapRef}
+      className="absolute z-10 top-0 w-full h-[100vh] overflow-hidden"
+    >
       {/* Video master oculto para sincronización */}
       <video
+        key={`master-${videoSrc}`}
         ref={masterVideoRef}
-        src="/carita.mp4"
+        src={videoSrc}
         className="hidden"
         autoPlay
         muted
@@ -150,33 +183,33 @@ export default function BgVideo() {
         playsInline
         preload="auto"
       />
-      
+
       {/* Capa por máscara: mismo vídeo, distinta máscara (ancho/alto en px) */}
       {masks.map((m) => {
         const wPx = (wrapRect.w * m.wPct) / 100
         const hPx = (wrapRect.h * m.hPct) / 100
         return (
           <div
-            key={`layer-${m.id}`}
+            key={`layer-${m.id}-${videoSrc}`}
             className="absolute inset-0 select-none pointer-events-none"
             style={{
               maskImage: `url(${m.image})`,
               WebkitMaskImage: `url(${m.image})`,
-              maskRepeat: 'no-repeat',
-              WebkitMaskRepeat: 'no-repeat',
+              maskRepeat: "no-repeat",
+              WebkitMaskRepeat: "no-repeat",
               maskSize: `${wPx}px ${hPx}px`,
               WebkitMaskSize: `${wPx}px ${hPx}px`,
               maskPosition: `${m.x}px ${m.y}px`,
               WebkitMaskPosition: `${m.x}px ${m.y}px`,
-              maskOrigin: 'border-box',
-              WebkitMaskOrigin: 'border-box',
+              maskOrigin: "border-box",
+              WebkitMaskOrigin: "border-box",
             }}
           >
             <video
               ref={(el) => {
                 if (el) videoRefs.current[m.id] = el
               }}
-              src="/carita.mp4"
+              src={videoSrc}
               className="w-full h-full object-cover pointer-events-none"
               muted
               loop
@@ -191,8 +224,8 @@ export default function BgVideo() {
       {masks.map((m) => {
         const wPx = (wrapRect.w * m.wPct) / 100
         const hPx = (wrapRect.h * m.hPct) / 100
-        const xCoord = Math.round(m.x).toString().padStart(5, '0')
-        const yCoord = Math.round(m.y).toString().padStart(5, '0')
+        const xCoord = Math.round(m.x).toString().padStart(5, "0")
+        const yCoord = Math.round(m.y).toString().padStart(5, "0")
         return (
           <div
             key={`handle-${m.id}`}
@@ -204,17 +237,17 @@ export default function BgVideo() {
           >
             {/* Coordenadas arriba */}
             <div className="absolute -top-[21px] -left-[.5px] text-white text-[11px] tracking-[.15em] font-mono uppercase select-none pointer-events-none bg-gray-500/60 px-2 py-0.5 rounded-sm drop-shadow-[0_0_3px_rgba(255,255,255,0.8)]">
-              X:{xCoord}PX    Y:{yCoord}PX
+              X:{xCoord}PX Y:{yCoord}PX
             </div>
-            {/* Borde draggable - solo el contorno sin ocupar espacio */}
+            {/* Borde draggable */}
             <div
               onPointerDown={onHandlePointerDown(m.id)}
               className="touch-none cursor-grab active:cursor-grabbing"
               style={{
                 width: wPx,
                 height: hPx,
-                outline: '1px solid rgba(255, 255, 255, 0.4)',
-                outlineOffset: '-1px',
+                outline: "1px solid rgba(255, 255, 255, 0.4)",
+                outlineOffset: "-1px",
               }}
             />
           </div>
@@ -228,12 +261,12 @@ export default function BgVideo() {
 
 function placeInitialMasks(templates, rect) {
   const zones = [
-    { fx: 0.12, fy: 0.14 },  // pequeña arriba izquierda
-    { fx: 0.37, fy: 0.19 },  // grande centro-arriba
-    { fx: 0.75, fy: 0.15 },  // pequeña arriba derecha
-    { fx: 0.13, fy: 0.55 },  // mediana medio-izquierda
-    { fx: 0.20, fy: 0.60 },  // mediana-grande centro
-    { fx: 0.25, fy: 0.40 },  // pequeña abajo derecha
+    { fx: 0.12, fy: 0.14 }, // pequeña arriba izquierda
+    { fx: 0.37, fy: 0.19 }, // grande centro-arriba
+    { fx: 0.75, fy: 0.15 }, // pequeña arriba derecha
+    { fx: 0.13, fy: 0.55 }, // mediana medio-izquierda
+    { fx: 0.2, fy: 0.6 }, // mediana-grande centro
+    { fx: 0.25, fy: 0.4 }, // pequeña abajo derecha
   ]
   return templates.map((t, i) => {
     const wPx = (rect.w * t.wPct) / 100

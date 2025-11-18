@@ -1,3 +1,4 @@
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -6,6 +7,7 @@ import MouseStats from "@/components/MouseStats";
 import Noise from "@/components/Noise";
 import SystemStats from "@/components/SystemStats";
 import BgVideo from "@/components/BgVideo";
+import ClientLayout from "@/components/ClientLayout";
 // import EmbLogo from "@/components/EmbLogo";
 
 const robotoSlab = Roboto_Slab({
@@ -30,6 +32,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
       <body className={`${robotoSlab.variable} ${geistMono.variable} antialiased bg-[#0b0813]`}>
@@ -76,14 +79,17 @@ export default function RootLayout({ children }) {
             </svg>
           </div>
         </div>
-        <Header />
-        <BgVideo />
         
+        {/* Header + BgVideo + contenido, controlados desde un componente cliente */}
+        <ClientLayout>
+          {children}
+        </ClientLayout>
+
         {/* Logo EMB superior central */}
         {/* <div className="hidden lg:block absolute top-8 left-1/2 -translate-x-1/2 z-10 pointer-events-none select-none">
           <EmbLogo className="w-16 h-auto drop-shadow-[0_0_20px_rgba(147,51,234,0.7)]" />
         </div> */}
-        
+
         {/* Texto técnico de fondo superior central */}
         <div className="hidden lg:block absolute top-32 left-1/2 -translate-x-1/2 z-10 pointer-events-none select-none">
           <div className="font-mono text-[11px] text-white/25 tracking-wider leading-relaxed text-center">
@@ -93,10 +99,6 @@ export default function RootLayout({ children }) {
             <div className="-mb-2">VOLUME / NORMALIZED 100% / 100% [CONTENT_LOUDNESS -25.8DB]</div>
             <div>CODECS MV1A 2.8:665:15:0 / OPUS [20]</div>
           </div>
-        </div>
-
-        <div>
-          {children}
         </div>
         <div className="hidden lg:block absolute z-1 top-80 left-30">
           <SystemStats loaded={4} total={28} />
@@ -147,7 +149,7 @@ export default function RootLayout({ children }) {
           />
         </div>
         <div className="absolute top-0 -z-10 w-full h-[100vh] bg-white brightness-100">
-          <img 
+          <img
             src="/bg.jpg"
             alt="Fondo"
             className="w-full h-full object-cover object-center brightness-150 mix-blend-multiply"
@@ -165,7 +167,9 @@ export default function RootLayout({ children }) {
           </div>
 
         </div>
-
+        <div>
+          {children}
+        </div>
       </body>
     </html>
   );

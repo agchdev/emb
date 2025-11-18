@@ -1,18 +1,17 @@
-
-
 "use client"
+
 import Link from "next/link"
-// 👇 añade useRef
 import React, { useEffect, useRef, useState } from "react"
-import { usePathname } from "next/navigation"
 import TextType from "./TextType"
 
-const Header = () => {
+const Header = ({ onNavClick, currentTarget }) => {
   const rutas = ["HOME", "UEFN", "DEV", "MUSIC", "VFX"]
 
-  const pathname = usePathname()
-  const currentSegment = (pathname?.split("/").filter(Boolean)[0] || "HOME").toUpperCase()
-  const currentRoute = rutas.includes(currentSegment) ? currentSegment : "HOME"
+  // Usamos el target que viene del layout (controlado desde arriba)
+  const normalizedCurrent = (currentTarget || "HOME").toUpperCase()
+  const currentRoute = rutas.includes(normalizedCurrent)
+    ? normalizedCurrent
+    : "HOME"
 
   const [hover, setHover] = useState(false)
   const [open, setOpen] = useState(false)
@@ -25,10 +24,13 @@ const Header = () => {
   const dragRef = useRef(null)
 
   useEffect(() => {
-    if (!open) { setVisibleCount(0); return }
+    if (!open) {
+      setVisibleCount(0)
+      return
+    }
     setVisibleCount(0)
     const id = setInterval(() => {
-      setVisibleCount(n => {
+      setVisibleCount((n) => {
         const next = Math.min(n + 1, rutas.length)
         if (next === rutas.length) clearInterval(id)
         return next
@@ -38,24 +40,21 @@ const Header = () => {
   }, [open, rutas.length])
 
   function flickAnimation(e) {
-    setHover(h => !h)
+    setHover((h) => !h)
     const el = e.target
     if (!hover) el.classList.add("flickerAnimation")
     else el.classList.remove("flickerAnimation")
   }
 
-  // ✅ SOLO UN LINK A LA VEZ
+  // ✅ SOLO UN LINK A LA VEZ con BG animation
   function handleBGEnter(e) {
     const el = e.currentTarget // el <a>, no el hijo
-    // quita del anterior si existe y es distinto
     if (activeBGRef.current && activeBGRef.current !== el) {
       activeBGRef.current.classList.remove("flickerAnimationBG")
     }
-    // aplica al actual
     el.classList.add("flickerAnimationBG")
     activeBGRef.current = el
 
-    // reinicia el temporizador (2s)
     if (bgTimerRef.current) clearTimeout(bgTimerRef.current)
     bgTimerRef.current = setTimeout(() => {
       if (activeBGRef.current) {
@@ -125,10 +124,11 @@ const Header = () => {
             <div className="w-1 h-1 rounded-full bg-white/40"></div>
           </div>
         </div>
+
         <div className="flex-1 py-2 px-3">
           <button
             className="text-start w-full text-white/90 text-xs tracking-wider"
-            onClick={() => setOpen(v => !v)}
+            onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="nav-rutas"
           >
@@ -148,10 +148,12 @@ const Header = () => {
             >
               {rutas.slice(0, visibleCount).map((ruta) => {
                 const isActive = currentRoute === ruta
+                const sectionKey = ruta.toLowerCase() // "home", "uefn", etc.
+
                 return (
                   <Link
                     key={ruta}
-                    href={`/#${ruta.toLowerCase()}`}
+                    href={`/${ruta.toUpperCase()}`}
                     className={`block [word-spacing:20px] p-1.5 w-full transition-colors ${
                       isActive
                         ? "bg-white text-black"
@@ -160,7 +162,12 @@ const Header = () => {
                     onMouseEnter={handleBGEnter}
                     onMouseLeave={handleBGLeave}
                     aria-current={isActive ? "page" : undefined}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => {
+                      // si quieres evitar navegación real y usar solo secciones:
+                      // e.preventDefault()
+                      if (onNavClick) onNavClick(sectionKey)
+                      setOpen(false)
+                    }}
                   >
                     <TextType
                       text={`\\${ruta}`}
