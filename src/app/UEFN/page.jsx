@@ -1,9 +1,17 @@
-import React from 'react'
+"use client"
 
-const UEFN = () => {
+import { useState } from "react";
+import { LanguageSwitcher } from "../../components/LanguageSwitcher";
+import { UefnSection } from "../../components/UefnSection";
+
+export default function UEFN() {
+  const [lang, setLang] = useState("en");
+  const isEs = lang === "es";
+
   return (
-    <div>UEFN</div>
-  )
+    <div className="relative z-20 px-6 pb-40 text-white">
+      <LanguageSwitcher lang={lang} setLang={setLang} />
+      <UefnSection isEs={isEs} />
+    </div>
+  );
 }
-
-export default UEFN

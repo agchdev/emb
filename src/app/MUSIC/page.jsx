@@ -1,18 +1,17 @@
-"use client";
+"use client"
 
 import { useState } from "react";
-import { LanguageSwitcher } from "../components/LanguageSwitcher";
-import { HomeSection } from "../components/HomeSection";
+import { LanguageSwitcher } from "../../components/LanguageSwitcher";
+import { MusicSection } from "../../components/MusicSection";
 
-export default function Home() {
+export default function MUSIC() {
   const [lang, setLang] = useState("en");
   const isEs = lang === "es";
 
   return (
     <div className="relative z-20 px-6 pb-40 text-white">
       <LanguageSwitcher lang={lang} setLang={setLang} />
-
-      <HomeSection isEs={isEs} />
+      <MusicSection isEs={isEs} />
     </div>
   );
 }
