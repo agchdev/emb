@@ -103,7 +103,7 @@ export function MusicSection({ isEs }) {
         <div className="mt-10 grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)] text-xs md:text-sm text-white/70">
           <div>
             <p className="text-white/40 uppercase tracking-[0.2em] mb-3">
-              {isEs ? "QUÉ PRODUZCO" : "WHAT I PRODUCE"}
+              {isEs ? "QUÉ PRODUCIMOS" : "WHAT WE PRODUCE"}
             </p>
             <ul className="space-y-2">
               <li className="flex gap-3">

@@ -122,7 +122,7 @@ export function VfxSection({ isEs }) {
         <div className="mt-10 grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)] text-xs md:text-sm text-white/70">
           <div>
             <p className="text-white/40 uppercase tracking-[0.2em] mb-3">
-              {isEs ? "QUÉ AÑADO" : "WHAT I ADD"}
+              {isEs ? "QUÉ AÑADIMOS" : "WHAT WE ADD"}
             </p>
             <ul className="space-y-2">
               <li className="flex gap-3">

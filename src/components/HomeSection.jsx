@@ -44,8 +44,8 @@ export function HomeSection({ isEs }) {
         </h1>
         <p className="text-sm md:text-base text-white/70 max-w-2xl">
           {isEs
-            ? "Combino motores en tiempo real, motion design y sonido para crear secuencias cinematográficas, visuales estilizadas y experiencias web experimentales."
-            : "I combine real-time engines, motion design and sound to craft cinematic sequences, stylized visuals and experimental web experiences."}
+            ? "Combinamos motores en tiempo real, motion design y sonido para crear secuencias cinematográficas, visuales estilizadas y experiencias web experimentales."
+            : "We combine real-time engines, motion design and sound to craft cinematic sequences, stylized visuals and experimental web experiences."}
         </p>
 
         <div className="mt-6 inline-flex items-center gap-3 text-[11px] font-mono tracking-[0.25em] text-white/60">
@@ -84,7 +84,7 @@ export function HomeSection({ isEs }) {
         <div className="mt-10 grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)] text-xs md:text-sm text-white/70">
           <div>
             <p className="text-white/40 uppercase tracking-[0.2em] mb-3">
-              {isEs ? "QUÉ HAGO" : "WHAT I DO"}
+              {isEs ? "QUÉ HACEMOS" : "WHAT WE DO"}
             </p>
             <ul className="space-y-2">
               <li className="flex gap-3">
