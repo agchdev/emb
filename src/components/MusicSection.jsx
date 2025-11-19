@@ -1,6 +1,32 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react";
+
 export function MusicSection({ isEs }) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [levels, setLevels] = useState(() => Array(12).fill(0.4));
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    const id = setInterval(() => {
+      setLevels((prev) => prev.map(() => Math.random()));
+    }, 160);
+    return () => clearInterval(id);
+  }, [isPlaying]);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (audio.paused) {
+      audio.play();
+      setIsPlaying(true);
+    } else {
+      audio.pause();
+      setIsPlaying(false);
+    }
+  };
+
   return (
     <section id="music" className="pb-32 border-t border-white/5">
       <div className="max-w-5xl mx-auto pt-24">
@@ -17,6 +43,51 @@ export function MusicSection({ isEs }) {
             ? "Ritmos, texturas y transiciones pensadas para encajar con los cortes, la tipografía y los movimientos de cámara."
             : "Rhythms, textures and transitions designed to lock perfectly with cuts, typography and camera moves."}
         </p>
+        <div className="border border-white/10 bg-black/50 backdrop-blur-md px-4 py-4 text-xs rounded-md mb-8">
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col">
+              <span className="font-mono tracking-[0.22em] text-white/40 uppercase">
+                {isEs ? "DEMO LOOP" : "DEMO LOOP"}
+              </span>
+              <span className="text-[11px] text-white/80">
+                {isEs
+                  ? "Cinemático / glitch / ambiente"
+                  : "Cinematic / glitch / ambient"}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={togglePlay}
+              className="px-3 py-1.5 text-[11px] font-mono tracking-[0.2em] uppercase border border-white/40 rounded-full hover:bg-white hover:text-black transition-colors"
+            >
+              {isPlaying
+                ? isEs
+                  ? "PAUSAR"
+                  : "PAUSE"
+                : isEs
+                ? "REPRODUCIR"
+                : "PLAY"}
+            </button>
+          </div>
+          <div className="mt-4 flex items-end gap-[3px] h-12">
+            {levels.map((value, index) => (
+              <div
+                key={index}
+                className="w-1.5 rounded-t-full bg-emerald-400/80 transition-all duration-150"
+                style={{
+                  height: `${20 + value * 80}%`,
+                  opacity: isPlaying ? 1 : 0.35,
+                }}
+              />
+            ))}
+          </div>
+          <audio
+            ref={audioRef}
+            src="/audio/music-demo.mp3"
+            loop
+            onEnded={() => setIsPlaying(false)}
+          />
+        </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="border border-white/10 bg-white/5 backdrop-blur-md px-4 py-4 text-xs uppercase tracking-[0.2em]">
             <p className="text-white/40 mb-1">{isEs ? "ESTILO" : "STYLE"}</p>

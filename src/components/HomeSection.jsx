@@ -1,6 +1,36 @@
 "use client"
 
+import { useEffect, useState } from "react";
+
 export function HomeSection({ isEs }) {
+  const focusItemsEs = [
+    "UEFN / ISLAS INTERACTIVAS",
+    "DEV / LANDINGS REACT",
+    "MUSIC / SOUND DESIGN",
+    "VFX / GLITCH & HUDS",
+  ];
+
+  const focusItemsEn = [
+    "UEFN / INTERACTIVE ISLANDS",
+    "DEV / REACT LANDINGS",
+    "MUSIC / SOUND DESIGN",
+    "VFX / GLITCH & HUDS",
+  ];
+
+  const [focusIndex, setFocusIndex] = useState(0);
+
+  useEffect(() => {
+    setFocusIndex(0);
+    const id = setInterval(() => {
+      setFocusIndex((prev) => {
+        const list = isEs ? focusItemsEs : focusItemsEn;
+        if (list.length === 0) return 0;
+        return (prev + 1) % list.length;
+      });
+    }, 3500);
+    return () => clearInterval(id);
+  }, [isEs]);
+
   return (
     <section id="home" className="pt-40 pb-32">
       <div className="max-w-5xl mx-auto">
@@ -17,6 +47,16 @@ export function HomeSection({ isEs }) {
             ? "Combino motores en tiempo real, motion design y sonido para crear secuencias cinematográficas, visuales estilizadas y experiencias web experimentales."
             : "I combine real-time engines, motion design and sound to craft cinematic sequences, stylized visuals and experimental web experiences."}
         </p>
+
+        <div className="mt-6 inline-flex items-center gap-3 text-[11px] font-mono tracking-[0.25em] text-white/60">
+          <span className="h-px w-8 bg-white/30" />
+          <span className="uppercase">
+            {isEs ? "FOCO ACTUAL" : "CURRENT FOCUS"}
+          </span>
+          <span className="text-white">
+            {(isEs ? focusItemsEs : focusItemsEn)[focusIndex]}
+          </span>
+        </div>
 
         {/* resumen rápido en 3 columnas */}
         <div className="grid gap-4 mt-10 md:grid-cols-3">

@@ -149,11 +149,12 @@ const Header = ({ onNavClick, currentTarget }) => {
               {rutas.slice(0, visibleCount).map((ruta) => {
                 const isActive = currentRoute === ruta
                 const sectionKey = ruta.toLowerCase() // "home", "uefn", etc.
+                const href = ruta === "HOME" ? "/" : `/${ruta.toUpperCase()}`
 
                 return (
                   <Link
                     key={ruta}
-                    href={`/${ruta.toUpperCase()}`}
+                    href={href}
                     className={`block [word-spacing:20px] p-1.5 w-full transition-colors ${
                       isActive
                         ? "bg-white text-black"

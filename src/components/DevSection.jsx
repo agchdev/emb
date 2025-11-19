@@ -1,4 +1,40 @@
+"use client"
+
+import { useEffect, useState } from "react";
+
 export function DevSection({ isEs }) {
+  const logsEs = [
+    "inicializando entorno /emb/dev [next, react, tailwind]",
+    "cargando layout interactivo y capas HUD",
+    "sincronizando viewport con bgvideo en tiempo real",
+    "preparando paneles para herramientas de creadores",
+    "optimizando animaciones y tiempos de carga...",
+  ];
+
+  const logsEn = [
+    "bootstrapping /emb/dev env [next, react, tailwind]",
+    "loading interactive layout and HUD layers",
+    "syncing viewport with realtime bgvideo",
+    "preparing panels for creator tools",
+    "optimizing animations and load times...",
+  ];
+
+  const [visibleLogs, setVisibleLogs] = useState([]);
+
+  useEffect(() => {
+    setVisibleLogs([]);
+    const currentLogs = isEs ? logsEs : logsEn;
+    let i = 0;
+    const id = setInterval(() => {
+      i += 1;
+      setVisibleLogs(currentLogs.slice(0, i));
+      if (i >= currentLogs.length) {
+        clearInterval(id);
+      }
+    }, 900);
+    return () => clearInterval(id);
+  }, [isEs]);
+
   return (
     <section id="dev" className="pb-32 border-t border-white/5">
       <div className="max-w-5xl mx-auto pt-24">
@@ -27,6 +63,21 @@ export function DevSection({ isEs }) {
           <div className="border border-white/10 bg-white/5 backdrop-blur-md px-4 py-4 text-xs uppercase tracking-[0.2em]">
             <p className="text-white/40 mb-1">{isEs ? "FORMATOS" : "FORMATS"}</p>
             <p className="text-white">LANDINGS · DASHBOARDS · TOOLS</p>
+          </div>
+        </div>
+
+        <div className="mt-10 border border-white/10 bg-black/60 backdrop-blur-md px-4 py-4 rounded-md text-xs font-mono">
+          <div className="flex items-center justify-between text-white/50 mb-2 uppercase tracking-[0.22em]">
+            <span>{isEs ? "CONSOLA RUNTIME" : "RUNTIME CONSOLE"}</span>
+            <span className="text-[10px] text-emerald-300/80">/emb/dev</span>
+          </div>
+          <div className="space-y-1 max-h-36 overflow-hidden text-[11px] leading-relaxed">
+            {visibleLogs.map((line, index) => (
+              <div key={index} className="whitespace-nowrap">
+                <span className="text-emerald-400 mr-2">~$</span>
+                <span className="text-white/80">{line}</span>
+              </div>
+            ))}
           </div>
         </div>
 

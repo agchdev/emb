@@ -1,4 +1,40 @@
+"use client"
+
+import { useRef, useState } from "react";
+
 export function VfxSection({ isEs }) {
+  const [split, setSplit] = useState(65);
+  const containerRef = useRef(null);
+
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+  const updateSplitFromClientX = (clientX) => {
+    const el = containerRef.current;
+    if (!el || typeof clientX !== "number") return;
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0) return;
+    const x = clientX - rect.left;
+    const pct = (x / rect.width) * 100;
+    setSplit(clamp(pct, 0, 100));
+  };
+
+  const handleDragPointerDown = (e) => {
+    e.preventDefault();
+    updateSplitFromClientX(e.clientX);
+
+    const handleMove = (ev) => {
+      updateSplitFromClientX(ev.clientX);
+    };
+
+    const handleUp = () => {
+      window.removeEventListener("pointermove", handleMove);
+      window.removeEventListener("pointerup", handleUp);
+    };
+
+    window.addEventListener("pointermove", handleMove);
+    window.addEventListener("pointerup", handleUp, { once: true });
+  };
+
   return (
     <section id="vfx" className="pb-32 border-t border-white/5">
       <div className="max-w-5xl mx-auto pt-24">
@@ -32,6 +68,54 @@ export function VfxSection({ isEs }) {
             </p>
             <p className="text-white">SOCIAL · BRAND · ESPORTS</p>
           </div>
+        </div>
+
+        <div className="mt-10">
+          <div className="text-[11px] font-mono tracking-[0.25em] text-white/40 uppercase mb-3">
+            {isEs
+              ? "COMPARADOR / ANTES → DESPUÉS"
+              : "COMPARATOR / BEFORE → AFTER"}
+          </div>
+          <div
+            ref={containerRef}
+            className="relative w-full max-w-3xl mx-auto overflow-hidden rounded-lg border border-white/15 bg-black/60"
+          >
+            <img
+              src="/vfx/base.jpg"
+              alt={isEs ? "Frame base sin tratamiento" : "Base frame without treatment"}
+              className="w-full h-full object-cover"
+            />
+            <div
+              className="absolute inset-0 overflow-hidden"
+              style={{ width: `${split}%` }}
+            >
+              <img
+                src="/vfx/graded.jpg"
+                alt={isEs ? "Frame con tratamiento VFX" : "Frame with VFX treatment"}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 pointer-events-none border-r border-emerald-400/80 shadow-[0_0_18px_rgba(52,211,153,0.9)]" />
+            </div>
+            <div
+              className="absolute inset-y-0 flex items-center"
+              style={{ left: `${split}%`, transform: "translateX(-50%)" }}
+            >
+              <div
+                className="h-14 w-14 rounded-full border border-emerald-400 bg-black/80 flex items-center justify-center text-[10px] font-mono tracking-[0.2em] text-emerald-200 cursor-ew-resize"
+                onPointerDown={handleDragPointerDown}
+              >
+                {isEs ? "ARRASTRA" : "DRAG"}
+              </div>
+            </div>
+          </div>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={split}
+            onChange={(e) => setSplit(Number(e.target.value))}
+            className="mt-4 w-full accent-emerald-400"
+          />
         </div>
 
         {/* detalle VFX */}
