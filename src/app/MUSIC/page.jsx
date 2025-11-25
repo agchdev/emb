@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 import { MusicSection } from "../../components/MusicSection";
+import { DraggablePanels } from "../../components/DraggablePanels";
 
 export default function MUSIC() {
   const [lang, setLang] = useState("en");
@@ -12,6 +13,7 @@ export default function MUSIC() {
     <div className="relative z-20 px-6 pb-40 text-white">
       <LanguageSwitcher lang={lang} setLang={setLang} />
       <MusicSection isEs={isEs} />
+      <DraggablePanels isEs={isEs} />
     </div>
   );
 }

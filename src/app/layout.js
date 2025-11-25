@@ -79,7 +79,7 @@ export default function RootLayout({ children }) {
             </svg>
           </div>
         </div>
-        
+
         {/* Header + BgVideo + contenido, controlados desde un componente cliente */}
         <ClientLayout>
           {children}
@@ -148,15 +148,15 @@ export default function RootLayout({ children }) {
             className="object-cover absolute top-100 left-90 w-4 opacity-30"
           />
         </div>
-        <div className="absolute top-0 -z-10 w-full h-[100vh] bg-white brightness-100">
+        <div className="fixed inset-0 -z-10 w-full h-full bg-white brightness-100">
           <img
             src="/bg.jpg"
             alt="Fondo"
             className="w-full h-full object-cover object-center brightness-150 mix-blend-multiply"
           />
         </div>
-        <div className="absolute top-0 -z-10 w-full h-[100vh]">
-          <div className="absolute top-0 w-full overflow-hidden h-[100vh] mask-[url(/cubo.png)] mask-size-[.2%]">
+        <div className="fixed inset-0 -z-10 w-full h-full">
+          <div className="absolute top-0 w-full overflow-hidden h-full mask-[url(/cubo.png)] mask-size-[.2%]">
             <Noise
               patternSize={50}
               patternScaleX={1}
