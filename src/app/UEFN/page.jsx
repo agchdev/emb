@@ -1,19 +1,267 @@
 "use client"
 
-import { useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 import { UefnSection } from "../../components/UefnSection";
 import { DraggablePanels } from "../../components/DraggablePanels";
+
+const MASK_IMAGE = "/rect.png";
+
+// 6 máscaras según la referencia
+const MASK_TEMPLATES = [
+  { id: 1, wPct: 35, hPct: 45, image: MASK_IMAGE }, // pequeña arriba izquierda
+  { id: 2, wPct: 35, hPct: 45, image: MASK_IMAGE }, // grande centro-arriba
+  { id: 3, wPct: 35, hPct: 45, image: MASK_IMAGE }, // pequeña arriba derecha
+  { id: 4, wPct: 35, hPct: 45, image: MASK_IMAGE }, // mediana medio-izquierda
+  { id: 5, wPct: 35, hPct: 45, image: MASK_IMAGE }, // mediana-grande centro
+  { id: 6, wPct: 35, hPct: 45, image: MASK_IMAGE }, // pequeña abajo derecha
+];
+
+const PROJECT_ITEMS = [
+  {
+    id: 1,
+    titleEs: "UEFN · Proyecto 01",
+    titleEn: "UEFN · Project 01",
+    tagEs: "MAPA · CINEMÁTICA",
+    tagEn: "MAP · CINEMATIC",
+  },
+  {
+    id: 2,
+    titleEs: "UEFN · Proyecto 02",
+    titleEn: "UEFN · Project 02",
+    tagEs: "EVENTO EN DIRECTO",
+    tagEn: "LIVE EVENT",
+  },
+  {
+    id: 3,
+    titleEs: "UEFN · Proyecto 03",
+    titleEn: "UEFN · Project 03",
+    tagEs: "ARENA · COMPETITIVA",
+    tagEn: "COMPETITIVE ARENA",
+  },
+  {
+    id: 4,
+    titleEs: "UEFN · Proyecto 04",
+    titleEn: "UEFN · Project 04",
+    tagEs: "HUB INTERACTIVO",
+    tagEn: "INTERACTIVE HUB",
+  },
+  {
+    id: 5,
+    titleEs: "UEFN · Proyecto 05",
+    titleEn: "UEFN · Project 05",
+    tagEs: "TRAILER IN-ENGINE",
+    tagEn: "IN-ENGINE TRAILER",
+  },
+  {
+    id: 6,
+    titleEs: "UEFN · Proyecto 06",
+    titleEn: "UEFN · Project 06",
+    tagEs: "EXPERIMENTO R&D",
+    tagEn: "R&D EXPERIMENT",
+  },
+];
 
 export default function UEFN() {
   const [lang, setLang] = useState("en");
   const isEs = lang === "es";
 
+  const wrapRef = useRef(null);
+  const [wrapRect, setWrapRect] = useState({ w: 0, h: 0, left: 0, top: 0 });
+  const [masks, setMasks] = useState([]);
+  const dragRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const el = wrapRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const newRect = { w: r.width, h: r.height, left: r.left, top: r.top };
+      setWrapRect(newRect);
+      if (masks.length === 0 && newRect.w > 0 && newRect.h > 0) {
+        setMasks(placeInitialMasks(MASK_TEMPLATES, newRect));
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onHandlePointerDown = (maskId) => (e) => {
+    e.preventDefault();
+    const m = masks.find((mm) => mm.id === maskId);
+    if (!m) return;
+    const handleRect = e.currentTarget.getBoundingClientRect();
+    dragRef.current = {
+      id: maskId,
+      pointerId: e.pointerId,
+      offsetX: e.clientX - handleRect.left,
+      offsetY: e.clientY - handleRect.top,
+    };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+
+  const onPointerMove = (e) => {
+    const d = dragRef.current;
+    if (!d) return;
+    const m = masks.find((mm) => mm.id === d.id);
+    if (!m) return;
+
+    // Medimos el wrapper en cada movimiento para que las coordenadas
+    // estén siempre alineadas con la posición real en pantalla,
+    // incluso si ha habido scroll.
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    const r = wrap.getBoundingClientRect();
+
+    const wPx = (r.width * m.wPct) / 100;
+    const hPx = (r.height * m.hPct) / 100;
+
+    const newX = clamp(
+      e.clientX - r.left - d.offsetX,
+      0,
+      Math.max(0, r.width - wPx),
+    );
+
+    // Para la coordenada vertical usamos la altura del viewport para
+    // que la máscara pueda moverse libremente en toda la pantalla
+    // sin salirse, incluso si el wrapper mide menos altura.
+    const viewportHeight =
+      typeof window !== "undefined" ? window.innerHeight : r.height;
+    const maxY = Math.max(0, viewportHeight - hPx);
+    const newY = clamp(
+      e.clientY - r.top - d.offsetY,
+      0,
+      maxY,
+    );
+
+    setMasks((prev) =>
+      prev.map((mm) => (mm.id === d.id ? { ...mm, x: newX, y: newY } : mm)),
+    );
+  };
+
+  const onPointerUp = () => {
+    dragRef.current = null;
+  };
+
   return (
     <div className="relative z-20 px-6 pb-40 text-white">
       <LanguageSwitcher lang={lang} setLang={setLang} />
-      <UefnSection isEs={isEs} />
-      <DraggablePanels isEs={isEs} />
+
+      {/* <UefnSection isEs={isEs} /> */}
+      {/* <DraggablePanels isEs={isEs} /> */}
+
+      <div
+        ref={wrapRef}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerUp}
+        className="absolute z-10 top-0 left-0 w-full h-[100vh] overflow-hidden"
+      >
+        {masks.map((m, index) => {
+          const wPx = (wrapRect.w * m.wPct) / 100;
+          const hPx = (wrapRect.h * m.hPct) / 100;
+          const slot = PROJECT_ITEMS[index] || PROJECT_ITEMS[0];
+          const title = isEs ? slot.titleEs : slot.titleEn;
+          const tag = isEs ? slot.tagEs : slot.tagEn;
+
+          return (
+            <div
+              key={`layer-${m.id}`}
+              className="absolute inset-0 select-none pointer-events-none"
+              style={{
+                maskImage: `url(${m.image})`,
+                WebkitMaskImage: `url(${m.image})`,
+                maskRepeat: "no-repeat",
+                WebkitMaskRepeat: "no-repeat",
+                maskSize: `${wPx}px ${hPx}px`,
+                WebkitMaskSize: `${wPx}px ${hPx}px`,
+                maskPosition: `${m.x}px ${m.y}px`,
+                WebkitMaskPosition: `${m.x}px ${m.y}px`,
+                maskOrigin: "border-box",
+                WebkitMaskOrigin: "border-box",
+              }}
+            >
+              <div className="relative w-full h-full">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.35),transparent_60%),radial-gradient(circle_at_bottom,rgba(147,51,234,0.35),transparent_60%)]" />
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))]" />
+                <div className="relative z-10 flex flex-col justify-between h-full px-4 py-3 sm:px-5 sm:py-4">
+                  <div className="text-[10px] font-mono tracking-[0.25em] text-white/60 uppercase">
+                    {isEs ? "PROYECTO UEFN" : "UEFN PROJECT"}
+                  </div>
+                  <div className="space-y-1">
+                    <h2 className="text-sm sm:text-base md:text-lg font-semibold tracking-tight text-white">
+                      {title}
+                    </h2>
+                    <p className="text-[10px] font-mono tracking-[0.25em] text-emerald-300/90 uppercase">
+                      {tag}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+        {masks.map((m) => {
+          const wPx = (wrapRect.w * m.wPct) / 100;
+          const hPx = (wrapRect.h * m.hPct) / 100;
+          const xCoord = Math.round(m.x).toString().padStart(5, "0");
+          const yCoord = Math.round(m.y).toString().padStart(5, "0");
+
+          return (
+            <div
+              key={`handle-${m.id}`}
+              className="absolute z-20"
+              style={{
+                left: m.x,
+                top: m.y,
+              }}
+            >
+              {/* Coordenadas arriba */}
+              <div className="absolute -top-[21px] -left-[.5px] text-white text-[11px] tracking-[.15em] font-mono uppercase select-none pointer-events-none bg-gray-500/60 px-2 py-0.5 rounded-sm drop-shadow-[0_0_3px_rgba(255,255,255,0.8)]">
+                X:{xCoord}PX Y:{yCoord}PX
+              </div>
+              {/* Borde draggable */}
+              <div
+                onPointerDown={onHandlePointerDown(m.id)}
+                className="touch-none cursor-grab active:cursor-grabbing"
+                style={{
+                  width: wPx,
+                  height: hPx,
+                  outline: "1px solid rgba(255, 255, 255, 0.4)",
+                  outlineOffset: "-1px",
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
+}
+
+/* ----------------- Utilidades ----------------- */
+
+function placeInitialMasks(templates, rect) {
+  const zones = [
+    { fx: 0.12, fy: 0.14 }, // pequeña arriba izquierda
+    { fx: 0.37, fy: 0.19 }, // grande centro-arriba
+    { fx: 0.75, fy: 0.15 }, // pequeña arriba derecha
+    { fx: 0.13, fy: 0.55 }, // mediana medio-izquierda
+    { fx: 0.2, fy: 0.6 }, // mediana-grande centro
+    { fx: 0.25, fy: 0.4 }, // pequeña abajo derecha
+  ]
+  return templates.map((t, i) => {
+    const wPx = (rect.w * t.wPct) / 100
+    const hPx = (rect.h * t.hPct) / 100
+    const x = clamp(rect.w * zones[i].fx, 0, Math.max(0, rect.w - wPx))
+    const y = clamp(rect.h * zones[i].fy, 0, Math.max(0, rect.h - hPx))
+    return { id: t.id, wPct: t.wPct, hPct: t.hPct, image: t.image, x, y }
+  })
+}
+
+function clamp(v, min, max) {
+  return Math.min(Math.max(v, min), max)
 }
