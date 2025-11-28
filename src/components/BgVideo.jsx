@@ -1,5 +1,5 @@
 "use client"
-import React, { useLayoutEffect, useRef, useState } from "react"
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 
 const MASK_IMAGE = "/rect.png"
 
@@ -31,6 +31,22 @@ export default function BgVideo({ currentTarget = "home" }) {
   const dragRef = useRef(null)
   const videoRefs = useRef({})
   const masterVideoRef = useRef(null)
+
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const check = () => {
+      setIsMobile(window.innerWidth < 1024)
+    }
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [])
+
+  const sortedMasks = [...masks].sort(
+    (a, b) => (a.z || 0) - (b.z || 0),
+  )
 
   // normalizamos el target
   const normalized = (currentTarget || "home").toLowerCase()
@@ -131,6 +147,15 @@ export default function BgVideo({ currentTarget = "home" }) {
       offsetX: e.clientX - handleRect.left,
       offsetY: e.clientY - handleRect.top,
     }
+    setMasks((prev) => {
+      const maxZ = prev.reduce(
+        (max, mm) => Math.max(max, mm.z || 0),
+        0,
+      )
+      return prev.map((mm) =>
+        mm.id === maskId ? { ...mm, z: maxZ + 1 } : mm,
+      )
+    })
     e.currentTarget.setPointerCapture?.(e.pointerId)
     window.addEventListener("pointermove", onWindowPointerMove)
     window.addEventListener("pointerup", onWindowPointerUp, { once: true })
@@ -166,6 +191,23 @@ export default function BgVideo({ currentTarget = "home" }) {
     window.removeEventListener("pointermove", onWindowPointerMove)
   }
 
+  if (isMobile) {
+    return (
+      <div className="relative z-10 w-full h-[100vh] overflow-hidden">
+        <video
+          key={`mobile-${videoSrc}`}
+          src={videoSrc}
+          className="w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        />
+      </div>
+    )
+  }
+
   return (
     <div
       ref={wrapRef}
@@ -185,7 +227,7 @@ export default function BgVideo({ currentTarget = "home" }) {
       />
 
       {/* Capa por máscara: mismo vídeo, distinta máscara (ancho/alto en px) */}
-      {masks.map((m) => {
+      {sortedMasks.map((m) => {
         const wPx = (wrapRect.w * m.wPct) / 100
         const hPx = (wrapRect.h * m.hPct) / 100
         return (
@@ -203,6 +245,8 @@ export default function BgVideo({ currentTarget = "home" }) {
               WebkitMaskPosition: `${m.x}px ${m.y}px`,
               maskOrigin: "border-box",
               WebkitMaskOrigin: "border-box",
+              // capa base de la ventana en función de su "z"
+              zIndex: (m.z || 0) * 2,
             }}
           >
             <video
@@ -221,7 +265,7 @@ export default function BgVideo({ currentTarget = "home" }) {
       })}
 
       {/* Handle con coordenadas */}
-      {masks.map((m) => {
+      {sortedMasks.map((m) => {
         const wPx = (wrapRect.w * m.wPct) / 100
         const hPx = (wrapRect.h * m.hPct) / 100
         const xCoord = Math.round(m.x).toString().padStart(5, "0")
@@ -233,6 +277,8 @@ export default function BgVideo({ currentTarget = "home" }) {
             style={{
               left: m.x,
               top: m.y,
+              // borde por encima de su contenido, pero respetando el orden de z
+              zIndex: (m.z || 0) * 2 + 1,
             }}
           >
             {/* Coordenadas arriba */}
@@ -273,7 +319,8 @@ function placeInitialMasks(templates, rect) {
     const hPx = (rect.h * t.hPct) / 100
     const x = clamp(rect.w * zones[i].fx, 0, Math.max(0, rect.w - wPx))
     const y = clamp(rect.h * zones[i].fy, 0, Math.max(0, rect.h - hPx))
-    return { id: t.id, wPct: t.wPct, hPct: t.hPct, image: t.image, x, y }
+    // z inicial creciente para que el banner ya muestre las ventanas apiladas
+    return { id: t.id, wPct: t.wPct, hPct: t.hPct, image: t.image, x, y, z: i + 1 }
   })
 }
 
