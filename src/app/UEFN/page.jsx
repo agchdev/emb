@@ -71,6 +71,10 @@ export default function UEFN() {
   const [masks, setMasks] = useState([]);
   const dragRef = useRef(null);
 
+  const sortedMasks = [...masks].sort(
+    (a, b) => (a.z || 0) - (b.z || 0),
+  );
+
   useLayoutEffect(() => {
     const measure = () => {
       const el = wrapRef.current;
@@ -99,6 +103,15 @@ export default function UEFN() {
       offsetX: e.clientX - handleRect.left,
       offsetY: e.clientY - handleRect.top,
     };
+    setMasks((prev) => {
+      const maxZ = prev.reduce(
+        (max, mm) => Math.max(max, mm.z || 0),
+        0,
+      );
+      return prev.map((mm) =>
+        mm.id === maskId ? { ...mm, z: maxZ + 1 } : mm,
+      );
+    });
     e.currentTarget.setPointerCapture?.(e.pointerId);
   };
 
@@ -159,10 +172,10 @@ export default function UEFN() {
         onPointerLeave={onPointerUp}
         className="absolute z-10 top-0 left-0 w-full h-[100vh] overflow-hidden"
       >
-        {masks.map((m, index) => {
+        {sortedMasks.map((m) => {
           const wPx = (wrapRect.w * m.wPct) / 100;
           const hPx = (wrapRect.h * m.hPct) / 100;
-          const slot = PROJECT_ITEMS[index] || PROJECT_ITEMS[0];
+          const slot = PROJECT_ITEMS[m.id - 1] || PROJECT_ITEMS[0];
           const title = isEs ? slot.titleEs : slot.titleEn;
           const tag = isEs ? slot.tagEs : slot.tagEn;
 
@@ -181,6 +194,9 @@ export default function UEFN() {
                 WebkitMaskPosition: `${m.x}px ${m.y}px`,
                 maskOrigin: "border-box",
                 WebkitMaskOrigin: "border-box",
+                // cada ventana usa su "z" como capa base,
+                // multiplicada para dejar espacio al borde por encima
+                zIndex: (m.z || 0) * 2,
               }}
             >
               <div className="relative w-full h-full">
@@ -204,7 +220,7 @@ export default function UEFN() {
           );
         })}
 
-        {masks.map((m) => {
+        {sortedMasks.map((m) => {
           const wPx = (wrapRect.w * m.wPct) / 100;
           const hPx = (wrapRect.h * m.hPct) / 100;
           const xCoord = Math.round(m.x).toString().padStart(5, "0");
@@ -217,6 +233,9 @@ export default function UEFN() {
               style={{
                 left: m.x,
                 top: m.y,
+                // el borde va justo por encima del contenido de su propia ventana,
+                // pero siempre por debajo de cualquier ventana con z superior
+                zIndex: (m.z || 0) * 2 + 1,
               }}
             >
               {/* Coordenadas arriba */}
@@ -246,9 +265,9 @@ export default function UEFN() {
 
 function placeInitialMasks(templates, rect) {
   const zones = [
-    { fx: 0.12, fy: 0.14 }, // pequeña arriba izquierda
+    { fx: 0.08, fy: 0.14 }, // arriba izquierda
+    { fx: 0.57, fy: 0.25 }, // arriba derecha
     { fx: 0.37, fy: 0.19 }, // grande centro-arriba
-    { fx: 0.75, fy: 0.15 }, // pequeña arriba derecha
     { fx: 0.13, fy: 0.55 }, // mediana medio-izquierda
     { fx: 0.2, fy: 0.6 }, // mediana-grande centro
     { fx: 0.25, fy: 0.4 }, // pequeña abajo derecha
@@ -258,7 +277,8 @@ function placeInitialMasks(templates, rect) {
     const hPx = (rect.h * t.hPct) / 100
     const x = clamp(rect.w * zones[i].fx, 0, Math.max(0, rect.w - wPx))
     const y = clamp(rect.h * zones[i].fy, 0, Math.max(0, rect.h - hPx))
-    return { id: t.id, wPct: t.wPct, hPct: t.hPct, image: t.image, x, y }
+    // z inicial creciente para que ya aparezcan superpuestas como ventanas
+    return { id: t.id, wPct: t.wPct, hPct: t.hPct, image: t.image, x, y, z: i + 1 }
   })
 }
 

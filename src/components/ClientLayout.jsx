@@ -1,12 +1,29 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import BgVideo from "@/components/BgVideo";
 
 export default function ClientLayout({ children }) {
-  // lo que se haya clicado en el header; por ejemplo sección o "videoId"
-  const [currentTarget, setCurrentTarget] = useState("home");
+  const pathname = usePathname();
+
+  const getInitialTargetFromPath = (path) => {
+    if (!path || path === "/") return "home";
+    const lower = path.toLowerCase();
+    if (lower.startsWith("/uefn")) return "uefn";
+    if (lower.startsWith("/dev")) return "dev";
+    if (lower.startsWith("/music")) return "music";
+    if (lower.startsWith("/vfx")) return "vfx";
+    return "home";
+  };
+
+  // lo que se haya clicado en el header; por ejemplo sección o "videoId".
+  // Inicializamos en base a la ruta para que al recargar en una página interna
+  // se mantenga el vídeo correcto en el banner.
+  const [currentTarget, setCurrentTarget] = useState(() =>
+    getInitialTargetFromPath(pathname),
+  );
 
   const handleHeaderClick = (target) => {
     // target puede ser "home", "uefn", "dev", "music", "vfx", etc.
