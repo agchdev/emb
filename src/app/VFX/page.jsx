@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 import { VfxSection } from "../../components/VfxSection";
 import { DraggablePanels } from "../../components/DraggablePanels";
+import { ProjectMasks } from "../../components/ProjectMasks";
 
 export default function VFX() {
   const [lang, setLang] = useState("en");
@@ -14,6 +15,7 @@ export default function VFX() {
       <LanguageSwitcher lang={lang} setLang={setLang} />
       <VfxSection isEs={isEs} />
       <DraggablePanels isEs={isEs} />
+      <ProjectMasks isEs={isEs} variant="vfx" />
     </div>
   );
 }

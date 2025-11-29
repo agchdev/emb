@@ -36,8 +36,8 @@ export function DevSection({ isEs }) {
   }, [isEs]);
 
   return (
-    <section id="dev" className="pb-32 border-t border-white/5">
-      <div className="max-w-5xl mx-auto pt-24">
+    <section id="dev" className="border-t border-white/5">
+      <div className="pt-250 max-w-5xl mx-auto">
         <p className="text-[11px] font-mono tracking-[0.35em] text-white/40 mb-4">
           C:\EMB\DEV
         </p>

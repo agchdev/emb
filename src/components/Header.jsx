@@ -105,9 +105,9 @@ const Header = ({ onNavClick, currentTarget }) => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
       <header
-        className="absolute top-5 left-5 lg:top-0 lg:left-0 lg:relative text-white bg-white/20 border border-white/25 backdrop-blur-xl shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_8px_20px_rgba(0,0,0,0.35)] w-56 z-[999] flex items-stretch"
+        className="pointer-events-auto absolute top-5 left-5 lg:top-0 lg:left-0 lg:relative text-white bg-white/20 border border-white/25 backdrop-blur-xl shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_8px_20px_rgba(0,0,0,0.35)] w-56 z-[999] flex items-stretch"
         style={headerStyle}
       >
         {/* Drag handle con 6 puntos */}

@@ -26,10 +26,9 @@ export default function ClientLayout({ children }) {
     getInitialTargetFromPath(pathname),
   );
 
-  // Scroll suave con Lenis en todas las páginas excepto Home
+  // Scroll suave con Lenis en todas las páginas (incluida Home)
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!pathname || pathname === "/") return;
 
     const lenis = new Lenis({
       smoothWheel: true,
@@ -49,33 +48,6 @@ export default function ClientLayout({ children }) {
       if (frameId) cancelAnimationFrame(frameId);
       lenis.destroy();
     };
-  }, [pathname]);
-
-  // Bucle de scroll infinito suave (tipo Orage) en todas menos Home
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!pathname || pathname === "/") return;
-
-    const handleScrollLoop = () => {
-      const doc = document.documentElement;
-      const scrollY = window.scrollY || window.pageYOffset || 0;
-      const vh = window.innerHeight || 0;
-      const fullHeight = doc.scrollHeight || 0;
-
-      // Evitamos comportamientos raros en páginas muy cortas
-      if (fullHeight <= vh * 1.5) return;
-
-      // margen antes del final para que no se note "la pared" al llegar abajo
-      const margin = vh * 0.5; // media pantalla antes del final
-
-      // cuando entramos en la zona de margen, teletransportamos casi al inicio
-      if (scrollY + vh >= fullHeight - margin) {
-        window.scrollTo({ top: 1, behavior: "auto" });
-      }
-    };
-
-    window.addEventListener("scroll", handleScrollLoop);
-    return () => window.removeEventListener("scroll", handleScrollLoop);
   }, [pathname]);
 
   const handleHeaderClick = (target) => {

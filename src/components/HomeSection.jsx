@@ -32,7 +32,7 @@ export function HomeSection({ isEs }) {
   }, [isEs]);
 
   return (
-    <section id="home" className="pt-40 pb-32">
+    <section id="home" className="sm:pt-280 pt-40 pb-32">
       <div className="max-w-5xl mx-auto">
         <p className="text-[11px] font-mono tracking-[0.35em] text-white/40 mb-4">
           C:\EMB\HOME

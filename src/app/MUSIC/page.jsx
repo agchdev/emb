@@ -4,6 +4,7 @@ import { useState } from "react";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 import { MusicSection } from "../../components/MusicSection";
 import { DraggablePanels } from "../../components/DraggablePanels";
+import { ProjectMasks } from "../../components/ProjectMasks";
 
 export default function MUSIC() {
   const [lang, setLang] = useState("en");
@@ -14,6 +15,7 @@ export default function MUSIC() {
       <LanguageSwitcher lang={lang} setLang={setLang} />
       <MusicSection isEs={isEs} />
       <DraggablePanels isEs={isEs} />
+      <ProjectMasks isEs={isEs} variant="music" />
     </div>
   );
 }
