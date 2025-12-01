@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import BgVideo from "@/components/BgVideo";
+import { SectionWordmark } from "@/components/SectionWordmark";
 import Lenis from "@studio-freight/lenis";
 
 export default function ClientLayout({ children }) {
@@ -69,6 +70,9 @@ export default function ClientLayout({ children }) {
 
       {/* BgVideo recibe el dato y decide qué vídeo poner */}
       <BgVideo currentTarget={currentTarget} />
+
+      {/* Wordmark fijo de fondo para páginas internas */}
+      <SectionWordmark />
 
       <div>{children}</div>
     </>
