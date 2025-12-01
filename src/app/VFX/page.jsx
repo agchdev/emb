@@ -13,8 +13,8 @@ export default function VFX() {
   return (
     <div className="relative z-20 px-6 pb-40 text-white">
       <LanguageSwitcher lang={lang} setLang={setLang} />
-      <VfxSection isEs={isEs} />
-      <DraggablePanels isEs={isEs} />
+      {/* <VfxSection isEs={isEs} /> */}
+      {/* <DraggablePanels isEs={isEs} /> */}
       <ProjectMasks isEs={isEs} variant="vfx" />
     </div>
   );

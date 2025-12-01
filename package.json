@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@studio-freight/lenis": "^1.0.42",
+    "agch": "^0.0.13",
     "gsap": "^3.13.0",
     "matter-js": "^0.20.0",
     "motion": "^12.23.24",

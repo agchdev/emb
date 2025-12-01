@@ -255,8 +255,8 @@ export function ProjectMasks({ isEs, variant }) {
       {sortedMasks.map((m) => {
         const wPx = (wrapRect.w * m.wPct) / 100;
         const hPx = (wrapRect.w * m.hPct) / 100;
-        const xCoord = Math.round(m.x).toString().padStart(5, "0");
-        const yCoord = Math.round(m.y).toString().padStart(5, "0");
+        const slot = items[m.id - 1] || items[0];
+        const tag = isEs ? slot.tagEs : slot.tagEn;
 
         return (
           <div
@@ -268,8 +268,8 @@ export function ProjectMasks({ isEs, variant }) {
               zIndex: (m.z || 0) * 2 + 1,
             }}
           >
-            <div className="absolute -top-[21px] -left-[.5px] text-white text-[11px] tracking-[.15em] font-mono uppercase select-none pointer-events-none bg-gray-500/60 px-2 py-0.5 rounded-sm drop-shadow-[0_0_3px_rgba(255,255,255,0.8)]">
-              X:{xCoord}PX Y:{yCoord}PX
+            <div className="absolute -top-[21px] -left-[.5px] text-white text-[10px] tracking-[0.25em] font-mono uppercase select-none pointer-events-none bg-gray-500/60 px-2 py-0.5 rounded-sm drop-shadow-[0_0_3px_rgba(255,255,255,0.8)]">
+              {tag}
             </div>
             <div
               onPointerDown={onHandlePointerDown(m.id)}

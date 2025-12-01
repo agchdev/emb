@@ -13,8 +13,8 @@ export default function MUSIC() {
   return (
     <div className="relative z-20 px-6 pb-40 text-white">
       <LanguageSwitcher lang={lang} setLang={setLang} />
-      <MusicSection isEs={isEs} />
-      <DraggablePanels isEs={isEs} />
+      {/* <MusicSection isEs={isEs} /> */}
+      {/* <DraggablePanels isEs={isEs} /> */}
       <ProjectMasks isEs={isEs} variant="music" />
     </div>
   );
