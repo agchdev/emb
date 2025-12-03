@@ -33,6 +33,7 @@ export default function BgVideo({ currentTarget = "home" }) {
   const masterVideoRef = useRef(null)
 
   const [isMobile, setIsMobile] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -42,6 +43,25 @@ export default function BgVideo({ currentTarget = "home" }) {
     check()
     window.addEventListener("resize", check)
     return () => window.removeEventListener("resize", check)
+  }, [])
+
+  // Detectamos si el banner está visible en el viewport para pausar los vídeos cuando no se ve
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    if (!("IntersectionObserver" in window)) return
+
+    const el = wrapRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting)
+      },
+      { threshold: 0.1 },
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
   }, [])
 
   const sortedMasks = [...masks].sort(
@@ -78,6 +98,21 @@ export default function BgVideo({ currentTarget = "home" }) {
   useLayoutEffect(() => {
     const master = masterVideoRef.current
     if (!master || masks.length === 0) return
+
+    // Si el banner no está visible, pausamos todos los vídeos para ahorrar GPU
+    if (!isVisible) {
+      try {
+        master.pause()
+      } catch {}
+      Object.values(videoRefs.current).forEach((video) => {
+        if (video) {
+          try {
+            video.pause()
+          } catch {}
+        }
+      })
+      return
+    }
 
     let syncInterval
     let hasStarted = false
@@ -134,7 +169,7 @@ export default function BgVideo({ currentTarget = "home" }) {
       clearInterval(checkInterval)
       if (syncInterval) clearInterval(syncInterval)
     }
-  }, [masks.length, videoSrc])
+  }, [masks.length, videoSrc, isVisible])
 
   const onHandlePointerDown = (maskId) => (e) => {
     e.preventDefault()

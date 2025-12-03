@@ -19,44 +19,44 @@ const PROJECT_CONFIG = {
     labelEs: "PROYECTO UEFN",
     labelEn: "UEFN PROJECT",
     items: [
-      { id: 1, tagEs: "MAPA · CINEMÁTICA", tagEn: "MAP · CINEMATIC" },
-      { id: 2, tagEs: "EVENTO EN DIRECTO", tagEn: "LIVE EVENT" },
-      { id: 3, tagEs: "ARENA · COMPETITIVA", tagEn: "COMPETITIVE ARENA" },
-      { id: 4, tagEs: "HUB INTERACTIVO", tagEn: "INTERACTIVE HUB" },
-      { id: 5, tagEs: "TRAILER IN-ENGINE", tagEn: "IN-ENGINE TRAILER" },
+      { id: 1, tagEs: "MAPA · CINEMÁTICA", tagEn: "MAP · CINEMATIC", image: "/projects/uefn-1.jpg" },
+      { id: 2, tagEs: "EVENTO EN DIRECTO", tagEn: "LIVE EVENT", image: "/projects/uefn-2.jpg" },
+      { id: 3, tagEs: "ARENA · COMPETITIVA", tagEn: "COMPETITIVE ARENA", image: "/projects/uefn-3.jpg" },
+      { id: 4, tagEs: "HUB INTERACTIVO", tagEn: "INTERACTIVE HUB", image: "/projects/uefn-4.jpg" },
+      { id: 5, tagEs: "TRAILER IN-ENGINE", tagEn: "IN-ENGINE TRAILER", image: "/projects/uefn-5.jpg" },
     ],
   },
   dev: {
     labelEs: "PROYECTO DEV",
     labelEn: "DEV PROJECT",
     items: [
-      { id: 1, tagEs: "WEB · INTERACTIVA", tagEn: "INTERACTIVE WEB" },
-      { id: 2, tagEs: "LANDING · MARCAS", tagEn: "BRAND LANDING" },
-      { id: 3, tagEs: "DASHBOARDS · TIEMPO REAL", tagEn: "REAL-TIME DASHBOARDS" },
-      { id: 4, tagEs: "MICROSITES · EXPERIMENTALES", tagEn: "EXPERIMENTAL MICROSITES" },
-      { id: 5, tagEs: "SISTEMAS · UI", tagEn: "UI SYSTEMS" },
+      { id: 1, tagEs: "WEB · INTERACTIVA", tagEn: "INTERACTIVE WEB", image: "/projects/dev-1.jpg" },
+      { id: 2, tagEs: "LANDING · MARCAS", tagEn: "BRAND LANDING", image: "/projects/dev-2.jpg" },
+      { id: 3, tagEs: "DASHBOARDS · TIEMPO REAL", tagEn: "REAL-TIME DASHBOARDS", image: "/projects/dev-3.jpg" },
+      { id: 4, tagEs: "MICROSITES · EXPERIMENTALES", tagEn: "EXPERIMENTAL MICROSITES", image: "/projects/dev-4.jpg" },
+      { id: 5, tagEs: "SISTEMAS · UI", tagEn: "UI SYSTEMS", image: "/projects/dev-5.jpg" },
     ],
   },
   music: {
     labelEs: "PROYECTO MÚSICA",
     labelEn: "MUSIC PROJECT",
     items: [
-      { id: 1, tagEs: "SOUND DESIGN · FX", tagEn: "SOUND DESIGN · FX" },
-      { id: 2, tagEs: "BANDAS SONORAS", tagEn: "SCORE · SOUNDTRACK" },
-      { id: 3, tagEs: "MIX · MASTERING", tagEn: "MIX · MASTERING" },
-      { id: 4, tagEs: "IDENTIDADES SONORAS", tagEn: "SONIC BRANDING" },
-      { id: 5, tagEs: "AMBIENTES INTERACTIVOS", tagEn: "INTERACTIVE AMBIENCE" },
+      { id: 1, tagEs: "SOUND DESIGN · FX", tagEn: "SOUND DESIGN · FX", image: "/projects/music-1.jpg" },
+      { id: 2, tagEs: "BANDAS SONORAS", tagEn: "SCORE · SOUNDTRACK", image: "/projects/music-2.jpg" },
+      { id: 3, tagEs: "MIX · MASTERING", tagEn: "MIX · MASTERING", image: "/projects/music-3.jpg" },
+      { id: 4, tagEs: "IDENTIDADES SONORAS", tagEn: "SONIC BRANDING", image: "/projects/music-4.jpg" },
+      { id: 5, tagEs: "AMBIENTES INTERACTIVOS", tagEn: "INTERACTIVE AMBIENCE", image: "/projects/music-5.jpg" },
     ],
   },
   vfx: {
     labelEs: "PROYECTO VFX",
     labelEn: "VFX PROJECT",
     items: [
-      { id: 1, tagEs: "COMPOSICIÓN · VFX", tagEn: "VFX · COMPOSITING" },
-      { id: 2, tagEs: "CLEAN-UPS", tagEn: "CLEAN-UPS" },
-      { id: 3, tagEs: "SIMULACIONES", tagEn: "SIMULATIONS" },
-      { id: 4, tagEs: "LOOKDEV · COLOR", tagEn: "LOOKDEV · COLOR" },
-      { id: 5, tagEs: "BEFORE/AFTER · REELS", tagEn: "BEFORE/AFTER · REELS" },
+      { id: 1, tagEs: "COMPOSICIÓN · VFX", tagEn: "VFX · COMPOSITING", image: "/projects/vfx-1.jpg" },
+      { id: 2, tagEs: "CLEAN-UPS", tagEn: "CLEAN-UPS", image: "/projects/vfx-2.jpg" },
+      { id: 3, tagEs: "SIMULACIONES", tagEn: "SIMULATIONS", image: "/projects/vfx-3.jpg" },
+      { id: 4, tagEs: "LOOKDEV · COLOR", tagEn: "LOOKDEV · COLOR", image: "/projects/vfx-4.jpg" },
+      { id: 5, tagEs: "BEFORE/AFTER · REELS", tagEn: "BEFORE/AFTER · REELS", image: "/projects/vfx-5.jpg" },
     ],
   },
 };
@@ -188,6 +188,11 @@ export function ProjectMasks({ isEs, variant }) {
               key={tpl.id}
               className="w-full aspect-video bg-[#05030b] border border-white/30 relative overflow-hidden rounded-md"
             >
+              <img
+                src={slot.image}
+                alt={tag}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.35),transparent_60%),radial-gradient(circle_at_bottom,rgba(147,51,234,0.35),transparent_60%)]" />
               <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))]" />
               <div className="relative z-10 flex flex-col justify-between h-full px-4 py-3">
@@ -235,6 +240,11 @@ export function ProjectMasks({ isEs, variant }) {
             }}
           >
             <div className="relative w-full h-full">
+              <img
+                src={slot.image}
+                alt={tag}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.35),transparent_60%),radial-gradient(circle_at_bottom,rgba(147,51,234,0.35),transparent_60%)]" />
               <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))]" />
               <div className="relative z-10 flex flex-col justify-between h-full px-4 py-3 sm:px-5 sm:py-4">

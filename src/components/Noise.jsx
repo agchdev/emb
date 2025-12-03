@@ -19,7 +19,7 @@ const Noise = ({
 
     let frame = 0;
     let animationId;
-    const canvasSize = 1024;
+    const canvasSize = 512;
 
     const resize = () => {
       if (!canvas) return;
@@ -30,10 +30,11 @@ const Noise = ({
       canvas.style.height = '100vh';
     };
 
-    const drawGrain = () => {
-      const imageData = ctx.createImageData(canvasSize, canvasSize);
-      const data = imageData.data;
+    // Reutilizamos el mismo buffer de ImageData para no crear uno nuevo en cada frame
+    const imageData = ctx.createImageData(canvasSize, canvasSize);
+    const data = imageData.data;
 
+    const drawGrain = () => {
       for (let i = 0; i < data.length; i += 4) {
         const value = Math.random() * 255;
         data[i] = value;

@@ -22,26 +22,31 @@ const PROJECT_ITEMS = [
     id: 1,
     tagEs: "MAPA · CINEMÁTICA",
     tagEn: "MAP · CINEMATIC",
+    image: "/projects/uefn-1.jpg",
   },
   {
     id: 2,
     tagEs: "EVENTO EN DIRECTO",
     tagEn: "LIVE EVENT",
+    image: "/projects/uefn-2.jpg",
   },
   {
     id: 3,
     tagEs: "ARENA · COMPETITIVA",
     tagEn: "COMPETITIVE ARENA",
+    image: "/projects/uefn-3.jpg",
   },
   {
     id: 4,
     tagEs: "HUB INTERACTIVO",
     tagEn: "INTERACTIVE HUB",
+    image: "/projects/uefn-4.jpg",
   },
   {
     id: 5,
     tagEs: "TRAILER IN-ENGINE",
     tagEn: "IN-ENGINE TRAILER",
+    image: "/projects/uefn-5.jpg",
   },
   // {
     // id: 6,
@@ -171,6 +176,11 @@ export default function UEFN() {
                 key={tpl.id}
                 className="w-full aspect-video bg-[#05030b] border border-white/30 relative overflow-hidden rounded-md"
               >
+                <img
+                  src={slot.image}
+                  alt={tag}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.35),transparent_60%),radial-gradient(circle_at_bottom,rgba(147,51,234,0.35),transparent_60%)]" />
                 <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))]" />
                 <div className="relative z-10 flex flex-col justify-between h-full px-4 py-3">
@@ -218,6 +228,11 @@ export default function UEFN() {
                 }}
               >
                 <div className="relative w-full h-full">
+                  <img
+                    src={slot.image}
+                    alt={tag}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.35),transparent_60%),radial-gradient(circle_at_bottom,rgba(147,51,234,0.35),transparent_60%)]" />
                   <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.95),rgba(2,6,23,0.98))]" />
                   <div className="relative z-10 flex flex-col justify-between h-full px-4 py-3 sm:px-5 sm:py-4">

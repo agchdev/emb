@@ -35,9 +35,37 @@ export function SectionWordmark() {
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none flex items-center justify-center select-none">
-      <p className="text-[20vw] md:text-[14vw] lg:text-[10vw] font-black uppercase tracking-[0.08em] text-white/20">
-        {text}
-      </p>
+      {isEs ? (
+        <p className="text-[20vw] md:text-[14vw] lg:text-[15vw] font-black uppercase tracking-[0.08em] text-white/20">
+          <span className="inline-block" aria-hidden="true">
+            {text.split("").map((ch, idx) => (
+              <span
+                key={idx}
+                className="inline-block opacity-[0.45]"
+                aria-hidden="true"
+              >
+                {ch}
+              </span>
+            ))}
+          </span>
+          <span className="sr-only">{text}</span>
+        </p>
+      ) : (
+        <p className="text-[20vw] md:text-[14vw] lg:text-[20vw] font-black uppercase tracking-[0.04em] text-white/20">
+          <span className="inline-block" aria-hidden="true">
+            {text.split("").map((ch, idx) => (
+              <span
+                key={idx}
+                className="inline-block opacity-[0.45]"
+                aria-hidden="true"
+              >
+                {ch}
+              </span>
+            ))}
+          </span>
+          <span className="sr-only">{text}</span>
+        </p>
+      )}
     </div>
   );
 }
