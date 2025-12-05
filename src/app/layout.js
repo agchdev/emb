@@ -161,8 +161,8 @@ export default function RootLayout({ children }) {
               patternSize={50}
               patternScaleX={1}
               patternScaleY={1}
-              patternRefreshInterval={6}
-              patternAlpha={30}
+              patternRefreshInterval={8}
+              patternAlpha={16}
             />
           </div>
 

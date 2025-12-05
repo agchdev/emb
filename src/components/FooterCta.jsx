@@ -24,29 +24,27 @@ export function FooterCta() {
   }, []);
 
   const isEs = lang === "es";
-  //const topText = isEs ? "VAMOS" : "LET'S";
-  //const bottomText = isEs ? "A TOPE" : "ROCK";
-  //const email = "hello@emb.productions";
 
   return (
     <section
       id="contact"
-      className="h-[100vh] z-20 mt-32 text-white"
+      className="footer-cta-root relative h-[100vh] z-20 mt-32 text-white overflow-hidden"
     >
-      <div className="w-full h-full mx-auto">
-        <div className="relative h-full w-full overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="group relative flex items-center justify-center">
-              {/* Botón GO pequeño */}
-              <div className="relative z-10 flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-black text-[#ff0040] font-mono text-xs tracking-[0.35em] uppercase transition-all duration-400 ease-[cubic-bezier(1,0,1,1)] group-hover:scale-0 group-hover:opacity-0">
-                <span>GO</span>
-              </div>
 
-              {/* Círculo grande que aparece al hover */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative z-10 flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-black text-[#ff0040] font-mono text-xs uppercase scale-0 group-hover:scale-600 transition-transform duration-600 ease-[cubic-bezier(1,0,1,1)]">
-                </div>
-              </div>
+      <div className="relative w-full h-full mx-auto flex items-center justify-center">
+        <div className="group relative flex items-center justify-center">
+          {/* Wrapper que late como un corazón */}
+          <div className="footer-cta-heart-wrapper">
+            {/* Botón GO pequeño */}
+            <div className="relative z-10 flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-black text-[#ff0040] font-mono text-xs tracking-[0.35em] uppercase transition-all duration-400 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-0 group-hover:opacity-0">
+              <span>GO</span>
+            </div>
+          </div>
+
+          {/* Círculo grande que aparece al hover */}
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="footer-cta-big-circle relative flex items-center justify-center rounded-full bg-black/90 text-[#ff0040] border border-[#ff0040]/60 shadow-[0_0_80px_rgba(0,0,0,0.8)] w-16 h-16 md:w-20 md:h-20 max-w-none scale-0 group-hover:scale-500 transition-transform duration-600 ease-[cubic-bezier(0.19,1,0.22,1)]">
+              {/* Más adelante podemos volver a añadir aquí el texto LET'S / ROCK sincronizado con el idioma */}
             </div>
           </div>
         </div>
