@@ -228,7 +228,7 @@ export default function BgVideo({ currentTarget = "home" }) {
 
   if (isMobile) {
     return (
-      <div className="relative z-10 w-full h-[100vh] overflow-hidden">
+      <div className="relative z-30 w-full h-[100vh] overflow-hidden">
         <video
           key={`mobile-${videoSrc}`}
           src={videoSrc}
@@ -246,7 +246,7 @@ export default function BgVideo({ currentTarget = "home" }) {
   return (
     <div
       ref={wrapRef}
-      className="absolute z-10 top-0 w-full h-[100vh] overflow-hidden"
+      className="absolute z-30 top-0 w-full h-[100vh] overflow-hidden"
     >
       {/* Video master oculto para sincronización */}
       <video
