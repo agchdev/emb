@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import BgVideo from "@/components/BgVideo";
 import { SectionWordmark } from "@/components/SectionWordmark";
+import { FooterCta } from "@/components/FooterCta";
 import Lenis from "@studio-freight/lenis";
 
 export default function ClientLayout({ children }) {
@@ -75,6 +76,9 @@ export default function ClientLayout({ children }) {
       <SectionWordmark />
 
       <div>{children}</div>
+
+      
+      <FooterCta />
     </>
   );
 }
