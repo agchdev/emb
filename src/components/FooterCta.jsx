@@ -42,7 +42,7 @@ export function FooterCta() {
           </div>
 
           {/* Círculo grande que aparece al hover */}
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center">
             <div className="footer-cta-big-circle relative flex items-center justify-center rounded-full bg-black/90 text-[#ff0040] border border-[#ff0040]/60 shadow-[0_0_80px_rgba(0,0,0,0.8)] w-16 h-16 md:w-20 md:h-20 max-w-none scale-0 group-hover:scale-500 transition-transform duration-600 ease-[cubic-bezier(0.19,1,0.22,1)]">
               {/* Más adelante podemos volver a añadir aquí el texto LET'S / ROCK sincronizado con el idioma */}
             </div>

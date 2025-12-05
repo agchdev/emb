@@ -125,7 +125,7 @@ const Header = ({ onNavClick, currentTarget }) => {
           </div>
         </div>
 
-        <div className="flex-1 py-2 px-3">
+        <div className="flex-1 py-2 px-3 flex flex-col gap-2">
           <button
             className="text-start w-full text-white/90 text-xs tracking-wider"
             onClick={() => setOpen((v) => !v)}
@@ -144,7 +144,7 @@ const Header = ({ onNavClick, currentTarget }) => {
           {open && (
             <div
               id="nav-rutas"
-              className="mt-3 text-xs text-start lg:absolute lg:left-0 lg:top-full lg:mt-0 lg:w-full lg:bg-white/20 lg:backdrop-blur-xl lg:border lg:border-white/25 lg:shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_8px_20px_rgba(0,0,0,0.35)] z-[999]"
+              className="mt-2 text-xs text-start lg:absolute lg:left-0 lg:top-full lg:mt-0 lg:w-full lg:bg-white/20 lg:backdrop-blur-xl lg:border lg:border-white/25 lg:shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_8px_20px_rgba(0,0,0,0.35)] z-[999]"
             >
               {rutas.slice(0, visibleCount).map((ruta) => {
                 const isActive = currentRoute === ruta
@@ -182,6 +182,16 @@ const Header = ({ onNavClick, currentTarget }) => {
               })}
             </div>
           )}
+
+          <Link
+            href="/ABOUT"
+            className="mt-1 inline-flex items-center justify-between gap-2 rounded-sm border border-white/25 bg-black/40 px-2 py-1 text-[10px] font-mono tracking-[0.25em] uppercase text-white/80 hover:bg-white hover:text-black transition-colors"
+            onMouseEnter={handleBGEnter}
+            onMouseLeave={handleBGLeave}
+          >
+            <span className="[word-spacing:0.4em]">\\SOBRE NOSOTROS</span>
+            <span className="text-[8px] opacity-70">[about]</span>
+          </Link>
         </div>
       </header>
     </div>
