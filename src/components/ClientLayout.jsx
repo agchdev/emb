@@ -64,21 +64,29 @@ export default function ClientLayout({ children }) {
     }
   };
 
+  // Rutas para las que queremos banner + wordmark + footer
+  const isMainRoute = (() => {
+    if (!pathname || pathname === "/") return true;
+    const lower = pathname.toLowerCase();
+    if (lower.startsWith("/uefn")) return true;
+    if (lower.startsWith("/dev")) return true;
+    if (lower.startsWith("/music")) return true;
+    if (lower.startsWith("/vfx")) return true;
+    return false;
+  })();
+
   return (
     <>
       {/* le pasamos al header el callback y el target actual */}
       <Header onNavClick={handleHeaderClick} currentTarget={currentTarget} />
 
-      {/* BgVideo recibe el dato y decide qué vídeo poner */}
-      <BgVideo currentTarget={currentTarget} />
-
-      {/* Wordmark fijo de fondo para páginas internas */}
-      <SectionWordmark />
+      {/* BgVideo y Wordmark sólo en rutas principales (no en 404) */}
+      {isMainRoute && <BgVideo currentTarget={currentTarget} />}
+      {isMainRoute && <SectionWordmark />}
 
       <div>{children}</div>
 
-      
-      <FooterCta />
+      {isMainRoute && <FooterCta />}
     </>
   );
 }
