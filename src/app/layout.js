@@ -34,7 +34,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${robotoSlab.variable} ${geistMono.variable} antialiased bg-[#0b0813]`}>
         <div className="hidden lg:block"><MouseStats /></div>
         {/* ONLY DESKTOP */}

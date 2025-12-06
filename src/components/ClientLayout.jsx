@@ -2,14 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { AnimatePresence } from "framer-motion";
 import Header from "@/components/Header";
 import BgVideo from "@/components/BgVideo";
 import { SectionWordmark } from "@/components/SectionWordmark";
 import { FooterCta } from "@/components/FooterCta";
 import Lenis from "@studio-freight/lenis";
+import Preloader from "@/components/Preloader";
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
+  const [isLoading, setIsLoading] = useState(true);
 
   const getInitialTargetFromPath = (path) => {
     if (!path || path === "/") return "home";
@@ -77,6 +80,12 @@ export default function ClientLayout({ children }) {
 
   return (
     <>
+      <AnimatePresence mode="wait">
+        {isLoading && (
+          <Preloader key="preloader" onComplete={() => setIsLoading(false)} />
+        )}
+      </AnimatePresence>
+
       {/* le pasamos al header el callback y el target actual */}
       <Header onNavClick={handleHeaderClick} currentTarget={currentTarget} />
 
