@@ -4,6 +4,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 import { UefnSection } from "../../components/UefnSection";
 import { DraggablePanels } from "../../components/DraggablePanels";
+import Footer from "../../components/Footer";
 
 const MASK_IMAGE = "/rect.png";
 
@@ -226,6 +227,7 @@ export default function UEFN() {
                   // multiplicada para dejar espacio al borde por encima
                   zIndex: (m.z || 0) * 2,
                 }}
+<<<<<<< HEAD
               >
                 <div className="relative w-full h-full">
                   <img
@@ -289,6 +291,14 @@ export default function UEFN() {
           })}
         </div>
       )}
+=======
+              />
+            </div>
+          );
+        })}
+      </div>
+      <Footer isEs={isEs} />
+>>>>>>> 9f28b61 (footer)
     </div>
   );
 }

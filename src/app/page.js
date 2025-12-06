@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { HomeSection } from "../components/HomeSection";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const [lang, setLang] = useState("en");
@@ -13,6 +14,7 @@ export default function Home() {
       <LanguageSwitcher lang={lang} setLang={setLang} />
 
       <HomeSection isEs={isEs} />
+      <Footer isEs={isEs} />
     </div>
   );
 }

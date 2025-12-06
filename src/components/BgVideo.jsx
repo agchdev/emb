@@ -15,7 +15,7 @@ const MASK_TEMPLATES = [
 
 // 👇 aquí decides qué vídeo poner por sección
 const VIDEO_BY_TARGET = {
-  home: "/carita.mp4",
+  home: "/carita2.mp4",
   uefn: "/uefn.mp4",
   dev: "/dev.mp4",
   music: "/music.mp4",
