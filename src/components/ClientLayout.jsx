@@ -6,7 +6,6 @@ import { AnimatePresence } from "framer-motion";
 import Header from "@/components/Header";
 import BgVideo from "@/components/BgVideo";
 import { SectionWordmark } from "@/components/SectionWordmark";
-import { FooterCta } from "@/components/FooterCta";
 import Lenis from "@studio-freight/lenis";
 import Preloader from "@/components/Preloader";
 
@@ -94,8 +93,6 @@ export default function ClientLayout({ children }) {
       {isMainRoute && <SectionWordmark />}
 
       <div>{children}</div>
-
-      {isMainRoute && <FooterCta />}
     </>
   );
 }
