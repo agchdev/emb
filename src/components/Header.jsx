@@ -5,7 +5,18 @@ import React, { useEffect, useRef, useState } from "react"
 import TextType from "./TextType"
 
 const Header = ({ onNavClick, currentTarget }) => {
-  const rutas = ["HOME", "UEFN", "DEV", "MUSIC", "VFX"]
+  const baseRutas = ["HOME", "UEFN", "DEV", "MUSIC", "VFX"]
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const check = () => setIsMobile(window.innerWidth < 1024)
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
+  }, [])
+
+  const rutas = isMobile ? [...baseRutas, "ABOUT"] : baseRutas
 
   // Usamos el target que viene del layout (controlado desde arriba)
   const normalizedCurrent = (currentTarget || "HOME").toUpperCase()
@@ -73,6 +84,7 @@ const Header = ({ onNavClick, currentTarget }) => {
 
   // Drag handlers
   function onDragHandlePointerDown(e) {
+    if (isMobile) return
     e.stopPropagation()
     dragRef.current = {
       startX: e.clientX,
@@ -107,23 +119,25 @@ const Header = ({ onNavClick, currentTarget }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
       <header
-        className="pointer-events-auto absolute top-5 left-5 lg:top-0 lg:left-0 lg:relative text-white bg-white/20 border border-white/25 backdrop-blur-xl shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_8px_20px_rgba(0,0,0,0.35)] w-100 z-[999] flex items-center"
+        className="pointer-events-auto absolute top-5 left-5 lg:top-0 lg:left-0 lg:relative text-white bg-white/20 border border-white/25 backdrop-blur-xl shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_8px_20px_rgba(0,0,0,0.35)] w-[240px] sm:w-[280px] lg:w-[320px] z-[999] flex items-center"
         style={headerStyle}
       >
-        {/* Drag handle con 6 puntos */}
-        <div
-          className="flex flex-col justify-center items-center gap-1 px-2 py-2 cursor-grab active:cursor-grabbing border-r border-white/20 select-none"
-          onPointerDown={onDragHandlePointerDown}
-        >
-          <div className="grid grid-cols-2 gap-1">
-            <div className="w-1 h-1 rounded-full bg-white/40"></div>
-            <div className="w-1 h-1 rounded-full bg-white/40"></div>
-            <div className="w-1 h-1 rounded-full bg-white/40"></div>
-            <div className="w-1 h-1 rounded-full bg-white/40"></div>
-            <div className="w-1 h-1 rounded-full bg-white/40"></div>
-            <div className="w-1 h-1 rounded-full bg-white/40"></div>
+        {/* Drag handle con 6 puntos: solo desktop */}
+        {!isMobile && (
+          <div
+            className="flex flex-col justify-center items-center gap-1 px-2 py-2 cursor-grab active:cursor-grabbing border-r border-white/20 select-none"
+            onPointerDown={onDragHandlePointerDown}
+          >
+            <div className="grid grid-cols-2 gap-1">
+              <div className="w-1 h-1 rounded-full bg-white/40"></div>
+              <div className="w-1 h-1 rounded-full bg-white/40"></div>
+              <div className="w-1 h-1 rounded-full bg-white/40"></div>
+              <div className="w-1 h-1 rounded-full bg-white/40"></div>
+              <div className="w-1 h-1 rounded-full bg-white/40"></div>
+              <div className="w-1 h-1 rounded-full bg-white/40"></div>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="flex-1 py-2 px-3">
           <div className="flex items-center justify-between gap-2">
@@ -144,7 +158,7 @@ const Header = ({ onNavClick, currentTarget }) => {
 
             <Link
               href="/ABOUT"
-              className="text-[10px] tracking-[0.3em] uppercase text-white/70 hover:text-white transition-colors"
+              className="hidden lg:inline-flex text-[10px] tracking-[0.3em] uppercase text-white/70 hover:text-white transition-colors"
               onMouseEnter={handleBGEnter}
               onMouseLeave={handleBGLeave}
             >

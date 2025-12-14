@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -62,6 +62,15 @@ export default function About() {
   const [leftIndex, setLeftIndex] = useState(0);
   const [rightIndex, setRightIndex] = useState(0);
   const timeoutsRef = useRef([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -70,6 +79,20 @@ export default function About() {
   }, []);
 
   const pushFrame = () => {
+    if (isMobile) {
+      const center = leftImages[leftIndex % leftImages.length];
+      setLeftIndex((i) => i + 1);
+      setEntries((prev) => [
+        ...prev,
+        {
+          id: `${Date.now()}-C-${leftIndex}`,
+          side: "center",
+          ...center,
+        },
+      ].slice(-4));
+      return;
+    }
+
     const left = leftImages[leftIndex % leftImages.length];
     const right = rightImages[rightIndex % rightImages.length];
 
@@ -96,22 +119,11 @@ export default function About() {
   };
 
   return (
-    <div className="relative z-20 min-h-screen w-full overflow-hidden bg-black text-white">
+    <div className="relative z-20 min-h-screen w-full overflow-hidden text-white">
       <LanguageSwitcher lang={lang} setLang={setLang} />
 
-      {/* Reticula sutil */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-60" />
-      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_20%,rgba(52,211,153,0.08),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(244,114,182,0.08),transparent_40%),radial-gradient(circle_at_50%_70%,rgba(59,130,246,0.05),transparent_35%)]" />
-
-      {/* Marca de agua ABOUT */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <p className="text-[20vw] font-black uppercase tracking-[0.05em] text-white/4">
-          ABOUT
-        </p>
-      </div>
-
-      <div className="relative mx-auto flex h-screen max-w-6xl flex-col justify-center px-6">
-        <div className="grid h-full grid-rows-[1fr_auto_1fr] items-center">
+      <div className="relative mx-auto flex h-screen max-w-6xl flex-col justify-center px-6 pb-10 pt-8">
+        <div className="grid h-full grid-rows-[1.2fr_auto_1fr] items-center">
           {/* Top info */}
           <div className="flex flex-col gap-4 text-xs font-mono uppercase tracking-[0.22em] text-white/60">
             <div className="max-w-xl space-y-2 text-left normal-case text-white">
@@ -121,17 +133,15 @@ export default function About() {
           </div>
 
           {/* Center control */}
-          <div className="relative flex items-center justify-center">
+          <div className="relative flex items-center justify-center mt-20">
             <motion.button
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={pushFrame}
-              className="flex items-center gap-4 rounded-full border border-white/30 bg-black/60 px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_15px_40px_rgba(0,0,0,0.45)] backdrop-blur"
+              aria-label={t.cta}
+              className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-black/70 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_15px_40px_rgba(0,0,0,0.45)] backdrop-blur"
             >
-              <span className="text-white/60">{t.label}</span>
-              <span className="h-px w-6 bg-white/20" />
               <ArrowUpRight className="h-4 w-4 text-white" />
-              <span className="text-emerald-200">{t.cta}</span>
             </motion.button>
           </div>
 
@@ -170,21 +180,34 @@ export default function About() {
       <AnimatePresence>
         {entries.map((entry, idx) => {
           const isLeft = entry.side === "left";
-          const baseX = isLeft ? "-12vw" : "12vw";
+          const isCenter = entry.side === "center";
+          const baseX = isCenter ? "0" : isLeft ? "-12vw" : "12vw";
           const delay = Math.min(idx * 0.04, 0.4);
+          const positionClass = isMobile
+            ? "left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            : isLeft
+              ? "left-4 md:left-14 top-1/2 -translate-y-1/2"
+              : "right-4 md:right-14 top-1/2 -translate-y-1/2";
           return (
             <motion.div
               key={entry.id}
-              initial={{ opacity: 0, x: isLeft ? -80 : 80, scale: 0.96 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
+              initial={{
+                opacity: 0,
+                x: isMobile ? 0 : isLeft ? -80 : 80,
+                y: isMobile ? 20 : 0,
+                scale: 0.96,
+              }}
+              animate={{ opacity: 1, x: 0, y: isMobile ? 0 : undefined, scale: 1 }}
               exit={{ opacity: 0, y: 20 }}
               transition={{ duration: 0.5, delay }}
-              className={`pointer-events-none absolute top-1/2 -translate-y-1/2 ${
-                isLeft ? "left-4 md:left-14" : "right-4 md:right-14"
-              }`}
-              style={{ transform: `translateY(-50%) translateX(${baseX})` }}
+              className={`pointer-events-none absolute ${positionClass}`}
+              style={{ transform: isMobile ? undefined : `translateY(-50%) translateX(${baseX})` }}
             >
-              <div className="w-[44vw] max-w-[420px] overflow-hidden rounded-xl border border-white/20 bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] backdrop-blur">
+              <div
+                className={`overflow-hidden rounded-xl border border-white/20 bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] backdrop-blur ${
+                  isMobile ? "w-[78vw] max-w-[320px]" : "w-[44vw] max-w-[420px]"
+                }`}
+              >
                 <div className="relative aspect-[4/3]">
                   <img
                     src={entry.src}

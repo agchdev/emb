@@ -16,7 +16,7 @@ export function LanguageSwitcher({ lang, setLang }) {
   }, [lang]);
 
   return (
-    <div className="fixed right-6 top-6 z-50 text-[11px] font-mono tracking-[0.25em] uppercase flex items-center gap-1">
+    <div className="pointer-events-auto fixed right-4 top-4 md:right-6 md:top-6 z-[5000] text-[11px] font-mono tracking-[0.25em] uppercase flex items-center gap-1 rounded-full border border-white/15 bg-black/60 px-2 py-1 backdrop-blur">
       <button
         type="button"
         onClick={() => setLang("es")}
