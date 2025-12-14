@@ -1,333 +1,206 @@
 "use client";
 
-import { motion } from "motion/react";
-import {
-  Code2,
-  Share2,
-  Search,
-  Sparkles,
-  PanelsTopLeft,
-  Rocket,
-  Layers3,
-} from "lucide-react";
-import Footer from "@/components/Footer";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { ArrowUpRight } from "lucide-react";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
-const heroChips = [
-  { title: "Sites inmersivos", detail: "Next + motion en tiempo real" },
-  { title: "Software modular", detail: "Dashboards, flujos y automatizaciones" },
-  { title: "RRSS vivas", detail: "Contenido, direccion y reporting" },
-  { title: "SEO organico", detail: "Arquitectura + contenido evergreen" },
+const copy = {
+  es: {
+    intro:
+      "EMB es un estudio de direccion tecnica y motion. Dos Alejandros que combinan arquitectura, front y sistemas con VFX y sonido.",
+    details:
+      "Diseñamos lanzamientos serios con entregas medibles, ritmo audiovisual y QA continuo. Respuesta en menos de 24h, agenda clara y handoff limpio.",
+    contacts: {
+      social: ["Instagram", "LinkedIn", "Vimeo"],
+      project: "hola@emb.pro",
+      job: "Aplicar",
+      info: ["Contacto", "Legales", "Creditos"],
+    },
+    cta: "Disparar imagenes",
+    label: "C:\\EMB\\ABOUT",
+  },
+  en: {
+    intro:
+      "EMB is a technical direction + motion studio. Two Alejandros blending architecture, front, systems with VFX and sound.",
+    details:
+      "We ship serious launches with measurable delivery, audiovisual pace, and continuous QA. Replies under 24h, clear agenda, clean handoff.",
+    contacts: {
+      social: ["Instagram", "LinkedIn", "Vimeo"],
+      project: "hola@emb.pro",
+      job: "Apply",
+      info: ["Contact", "Legals", "Credits"],
+    },
+    cta: "Trigger frames",
+    label: "C:\\EMB\\ABOUT",
+  },
+};
+
+const leftImages = [
+  { src: "/projects/uefn-1.jpg", caption: "UEFN / Arena" },
+  { src: "/vfx/base.jpg", caption: "VFX / Base frame" },
+  { src: "/projects/uefn-3.jpg", caption: "UEFN / Competitive" },
+  { src: "/vfx/graded.jpg", caption: "VFX / Graded" },
 ];
 
-const duo = [
-  {
-    tag: "Alex / Dev",
-    focus: "Fullstack + IA",
-    bullets: ["APIs y sistemas", "Infra ligera", "Integraciones"],
-  },
-  {
-    tag: "Mar / Motion",
-    focus: "Visual + sonido",
-    bullets: ["RRSS + ads", "VFX + musica", "Brand ops"],
-  },
-];
-
-const modules = [
-  {
-    icon: Code2,
-    title: "Landings vivas",
-    detail: "Scroll reactivo, GSAP y componentes propios.",
-  },
-  {
-    icon: PanelsTopLeft,
-    title: "Apps ligeras",
-    detail: "Herramientas internas y paneles realtime.",
-  },
-  {
-    icon: Share2,
-    title: "Contenido + RRSS",
-    detail: "Clips, copys y metricas claras.",
-  },
-  {
-    icon: Search,
-    title: "SEO tecnico",
-    detail: "Auditoria, migracion y growth organico.",
-  },
-  {
-    icon: Sparkles,
-    title: "Experiencias",
-    detail: "Microsites 3D, reveals y launches.",
-  },
-  {
-    icon: Layers3,
-    title: "Brand systems",
-    detail: "Guias, kits y handoff para equipos.",
-  },
-];
-
-const pipeline = [
-  { title: "Brief", desc: "Call 15 min" },
-  { title: "Mood + blueprint", desc: "FigJam + prototipo" },
-  { title: "Build", desc: "Sprints cortos" },
-  { title: "Launch", desc: "SEO + training" },
-];
-
-const loops = [
-  ["Next.js", "UEFN", "GSAP", "Motion", "Ableton", "SEO"],
-  ["Contenido", "RRSS", "R&D", "Realtime", "Brand", "Automations"],
-];
-
-const stats = [
-  { label: "Respuestas", value: "<24h" },
-  { label: "Ventanas libres", value: "2/mes" },
-  { label: "Stack", value: "React x Motion" },
+const rightImages = [
+  { src: "/projects/uefn-2.jpg", caption: "UEFN / Live event" },
+  { src: "/projects/uefn-4.jpg", caption: "UEFN / Hub" },
+  { src: "/projects/uefn-5.jpg", caption: "UEFN / Trailer" },
+  { src: "/projects/uefn-1.jpg", caption: "UEFN / Arena" },
 ];
 
 export default function About() {
+  const [lang, setLang] = useState(() => {
+    if (typeof window === "undefined") return "en";
+    const stored = window.localStorage.getItem("emb_lang");
+    return stored === "es" || stored === "en" ? stored : "en";
+  });
+  const t = copy[lang];
+
+  const [entries, setEntries] = useState([]);
+  const [leftIndex, setLeftIndex] = useState(0);
+  const [rightIndex, setRightIndex] = useState(0);
+  const timeoutsRef = useRef([]);
+
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(clearTimeout);
+    };
+  }, []);
+
+  const pushFrame = () => {
+    const left = leftImages[leftIndex % leftImages.length];
+    const right = rightImages[rightIndex % rightImages.length];
+
+    setLeftIndex((i) => i + 1);
+    setRightIndex((i) => i + 1);
+
+    const leftEntry = {
+      id: `${Date.now()}-L-${leftIndex}`,
+      side: "left",
+      ...left,
+    };
+    const rightEntry = {
+      id: `${Date.now()}-R-${rightIndex}`,
+      side: "right",
+      ...right,
+    };
+
+    setEntries((prev) => [...prev, leftEntry].slice(-8));
+
+    const to = setTimeout(() => {
+      setEntries((prev) => [...prev, rightEntry].slice(-8));
+    }, 180);
+    timeoutsRef.current.push(to);
+  };
+
   return (
-    <div className="relative z-20 px-6 pb-32 text-white">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-y-0 left-1/2 h-[120vh] w-[50vw] -translate-x-1/2 bg-gradient-to-b from-white/5 via-fuchsia-500/10 to-transparent blur-[140px]" />
-        <div className="absolute -top-10 right-10 h-64 w-64 rounded-full border border-white/20 opacity-40" />
+    <div className="relative z-20 min-h-screen w-full overflow-hidden bg-black text-white">
+      <LanguageSwitcher lang={lang} setLang={setLang} />
+
+      {/* Reticula sutil */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-60" />
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_20%,rgba(52,211,153,0.08),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(244,114,182,0.08),transparent_40%),radial-gradient(circle_at_50%_70%,rgba(59,130,246,0.05),transparent_35%)]" />
+
+      {/* Marca de agua ABOUT */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <p className="text-[20vw] font-black uppercase tracking-[0.05em] text-white/4">
+          ABOUT
+        </p>
       </div>
 
-      <section className="mx-auto max-w-6xl pt-28">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-[11px] font-mono uppercase tracking-[0.4em] text-white/60"
-        >
-          EMB / ABOUT
-        </motion.p>
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="mt-5 text-4xl leading-tight md:text-6xl"
-        >
-          Duo dev + motion que disena webs, software y contenido con estetica de trailer.
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-4 text-base text-white/70"
-        >
-          Preferimos piezas cortas, loops de contenido y entregas modulares. Cada capa tiene motion y metricas desde dia uno.
-        </motion.p>
-
-        <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="border border-white/10 bg-white/5 p-6 backdrop-blur"
-          >
-            <div className="flex flex-wrap gap-4 text-sm text-white/70">
-              {stats.map((item) => (
-                <div key={item.label} className="flex flex-col">
-                  <span className="text-xs uppercase tracking-[0.3em] text-white/40">{item.label}</span>
-                  <span className="text-2xl font-semibold text-white">{item.value}</span>
-                </div>
-              ))}
+      <div className="relative mx-auto flex h-screen max-w-6xl flex-col justify-center px-6">
+        <div className="grid h-full grid-rows-[1fr_auto_1fr] items-center">
+          {/* Top info */}
+          <div className="flex flex-col gap-4 text-xs font-mono uppercase tracking-[0.22em] text-white/60">
+            <div className="max-w-xl space-y-2 text-left normal-case text-white">
+              <p className="font-semibold">{t.intro}</p>
+              <p className="text-white/70">{t.details}</p>
             </div>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              {heroChips.map((chip) => (
-                <motion.div
-                  key={chip.title}
-                  whileHover={{ y: -4, scale: 1.01 }}
-                  className="border border-white/10 bg-black/30 p-4"
-                >
-                  <p className="text-sm font-semibold">{chip.title}</p>
-                  <p className="mt-2 text-xs text-white/60">{chip.detail}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-fuchsia-500/20 via-transparent to-emerald-400/20 p-8"
-          >
-            <motion.div
-              className="absolute inset-10 rounded-full border border-white/20"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
-            />
-            <div className="relative space-y-3">
-              <p className="text-[11px] font-mono uppercase tracking-[0.4em] text-white/60">
-                Duo Mode
-              </p>
-              <p className="text-3xl font-semibold">Somos 2 chavales</p>
-              <p className="text-sm text-white/70">
-                Engineering + direccion visual trabajando en un mismo timeline.
-              </p>
-              <div className="flex gap-4 pt-4">
-                <div className="h-2 flex-1 rounded-full bg-white/15">
-                  <motion.div
-                    className="h-full rounded-full bg-white"
-                    animate={{ width: ["20%", "90%", "60%", "100%"] }}
-                    transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                  />
-                </div>
-                <span className="text-xs uppercase tracking-[0.3em] text-white/60">
-                  Sync
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="mx-auto mt-20 max-w-6xl">
-        <div className="grid gap-6 md:grid-cols-2">
-          {duo.map((profile) => (
-            <motion.div
-              key={profile.tag}
-              whileHover={{ rotateX: 6, rotateY: -6 }}
-              transition={{ type: "spring", stiffness: 200, damping: 20 }}
-              style={{ transformPerspective: 1200 }}
-              className="border border-white/10 bg-black/40 p-6 backdrop-blur"
+          {/* Center control */}
+          <div className="relative flex items-center justify-center">
+            <motion.button
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={pushFrame}
+              className="flex items-center gap-4 rounded-full border border-white/30 bg-black/60 px-6 py-3 text-sm font-semibold uppercase tracking-[0.25em] shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset,0_15px_40px_rgba(0,0,0,0.45)] backdrop-blur"
             >
-              <div className="flex items-center justify-between">
-                <p className="text-lg font-semibold">{profile.tag}</p>
-                <span className="text-xs uppercase tracking-[0.3em] text-emerald-200">
-                  {profile.focus}
-                </span>
-              </div>
-              <div className="mt-4 flex flex-wrap gap-3 text-xs uppercase tracking-[0.3em] text-white/60">
-                {profile.bullets.map((item) => (
-                  <span key={item} className="border border-white/15 px-3 py-1">
-                    {item}
-                  </span>
+              <span className="text-white/60">{t.label}</span>
+              <span className="h-px w-6 bg-white/20" />
+              <ArrowUpRight className="h-4 w-4 text-white" />
+              <span className="text-emerald-200">{t.cta}</span>
+            </motion.button>
+          </div>
+
+          {/* Bottom info */}
+          <div className="grid grid-cols-2 text-[11px] font-mono uppercase tracking-[0.2em] text-white/60">
+            <div className="space-y-2">
+              <p className="text-white">Social</p>
+              <div className="flex flex-col text-white/70">
+                {t.contacts.social.map((item) => (
+                  <span key={item}>{item}</span>
                 ))}
               </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto mt-20 max-w-6xl space-y-4">
-        {loops.map((row, index) => (
-          <motion.div
-            key={index}
-            className="overflow-hidden border border-white/5 bg-white/5 py-3"
-          >
-            <motion.div
-              className="flex gap-8 text-sm uppercase tracking-[0.5em] text-white/50"
-              animate={{ x: index % 2 === 0 ? ["0%", "-40%"] : ["-40%", "0%"] }}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-            >
-              {[...row, ...row].map((item, idx) => (
-                <span key={`${item}-${idx}`}>{item}</span>
-              ))}
-            </motion.div>
-          </motion.div>
-        ))}
-      </section>
-
-      <section className="mx-auto mt-20 max-w-6xl">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-[11px] font-mono uppercase tracking-[0.4em] text-white/60">
-              Modulos
-            </p>
-            <h2 className="mt-2 text-3xl font-semibold">Elegimos bloques segun el reto</h2>
-          </div>
-          <a
-            href="mailto:hola@emb.pro?subject=Explorar%20un%20modulo%20EMB"
-            className="text-sm uppercase tracking-[0.3em] text-emerald-200"
-          >
-            Cuentanos tu mix
-          </a>
-        </div>
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          {modules.map(({ icon: Icon, title, detail }) => (
-            <motion.div
-              key={title}
-              whileHover={{ y: -6 }}
-              className="group relative overflow-hidden border border-white/10 bg-white/5 p-6"
-            >
-              <div className="absolute inset-0 opacity-0 transition group-hover:opacity-100" />
-              <div className="flex items-center justify-between">
-                <Icon className="h-6 w-6 text-white" />
-                <Rocket className="h-4 w-4 text-white/40" />
+              <div className="mt-4 space-y-1">
+                <p className="text-white">For new project</p>
+                <p className="text-white/70">{t.contacts.project}</p>
               </div>
-              <p className="mt-6 text-2xl font-semibold">{title}</p>
-              <p className="mt-2 text-sm text-white/70">{detail}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto mt-20 max-w-6xl rounded-3xl border border-white/10 bg-black/40 p-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-[11px] font-mono uppercase tracking-[0.4em] text-white/60">
-              Pipeline
-            </p>
-            <h2 className="mt-2 text-3xl font-semibold">Timeline ultra claro</h2>
-          </div>
-          <p className="text-sm text-white/60">Status compartidos en Notion + board de motion.</p>
-        </div>
-        <div className="mt-10 grid gap-6 md:grid-cols-4">
-          {pipeline.map((step, index) => (
-            <div key={step.title} className="space-y-3">
-              <div className="flex items-center gap-3 text-sm text-white/50">
-                <span>0{index + 1}</span>
-                <div className="h-px flex-1 bg-white/10" />
-              </div>
-              <p className="text-xl font-semibold">{step.title}</p>
-              <p className="text-xs uppercase tracking-[0.3em] text-white/60">{step.desc}</p>
             </div>
-          ))}
-        </div>
-        <div className="mt-10 h-2 w-full rounded-full bg-white/10">
-          <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-emerald-300 via-white to-fuchsia-400"
-            animate={{ width: ["15%", "45%", "80%", "100%"] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </div>
-      </section>
-
-      <section className="mx-auto mt-20 max-w-4xl">
-        <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-br from-white/10 via-transparent to-black/50 p-10 text-center">
-          <motion.div
-            className="absolute inset-0 opacity-30"
-            animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 20% 20%, rgba(16,185,129,0.3), transparent 40%), radial-gradient(circle at 80% 0%, rgba(244,114,182,0.3), transparent 40%)",
-            }}
-          />
-          <div className="relative space-y-4">
-            <p className="text-[11px] font-mono uppercase tracking-[0.4em] text-white/60">
-              Ready?
-            </p>
-            <h2 className="text-4xl font-semibold">Dispara tu brief, nosotros montamos la escena.</h2>
-            <div className="flex flex-col items-center gap-4 md:flex-row md:justify-center">
-              <a
-                href="mailto:hola@emb.pro?subject=Necesito%20una%20experiencia%20EMB"
-                className="inline-flex items-center gap-3 rounded-full border border-white bg-white px-6 py-3 text-base font-semibold uppercase tracking-[0.3em] text-black"
-              >
-                Contactar
-              </a>
-              <p className="text-xs uppercase tracking-[0.3em] text-white/60">Agenda abierta</p>
+            <div className="space-y-2 text-right">
+              <div className="space-y-1">
+                <p className="text-white">Job</p>
+                <p className="text-white/70">{t.contacts.job}</p>
+              </div>
+              <div className="mt-3 space-y-1">
+                {t.contacts.info.map((item) => (
+                  <p key={item} className="text-white/70">
+                    {item}
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <Footer isEs />
+      {/* Frames left/right */}
+      <AnimatePresence>
+        {entries.map((entry, idx) => {
+          const isLeft = entry.side === "left";
+          const baseX = isLeft ? "-12vw" : "12vw";
+          const delay = Math.min(idx * 0.04, 0.4);
+          return (
+            <motion.div
+              key={entry.id}
+              initial={{ opacity: 0, x: isLeft ? -80 : 80, scale: 0.96 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.5, delay }}
+              className={`pointer-events-none absolute top-1/2 -translate-y-1/2 ${
+                isLeft ? "left-4 md:left-14" : "right-4 md:right-14"
+              }`}
+              style={{ transform: `translateY(-50%) translateX(${baseX})` }}
+            >
+              <div className="w-[44vw] max-w-[420px] overflow-hidden rounded-xl border border-white/20 bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] backdrop-blur">
+                <div className="relative aspect-[4/3]">
+                  <img
+                    src={entry.src}
+                    alt={entry.caption}
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute bottom-3 left-3 rounded-full border border-white/20 bg-black/60 px-3 py-1 text-[10px] font-mono uppercase tracking-[0.22em] text-white">
+                    {entry.caption}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
     </div>
   );
 }

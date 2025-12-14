@@ -8,6 +8,7 @@ import BgVideo from "@/components/BgVideo";
 import { SectionWordmark } from "@/components/SectionWordmark";
 import Lenis from "@studio-freight/lenis";
 import Preloader from "@/components/Preloader";
+import SignalRail from "@/components/SignalRail";
 
 export default function ClientLayout({ children }) {
   const pathname = usePathname();
@@ -91,6 +92,7 @@ export default function ClientLayout({ children }) {
       {/* BgVideo y Wordmark sólo en rutas principales (no en 404) */}
       {isMainRoute && <BgVideo currentTarget={currentTarget} />}
       {isMainRoute && <SectionWordmark />}
+      {isMainRoute && <SignalRail currentTarget={currentTarget} />}
 
       <div>{children}</div>
     </>

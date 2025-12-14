@@ -128,6 +128,32 @@ body {
   }
 }
 
+@keyframes ambientPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes ambientSweep {
+  0% {
+    transform: translateX(-45%) skewX(-6deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(45%) skewX(4deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(-45%) skewX(-6deg);
+    opacity: 0.5;
+  }
+}
+
 /* Footer CTA: rejilla local y latido */
 .footer-cta-grid {
   transform-origin: center;
