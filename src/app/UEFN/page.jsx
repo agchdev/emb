@@ -4,7 +4,6 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 import { UefnSection } from "../../components/UefnSection";
 import { DraggablePanels } from "../../components/DraggablePanels";
-import Footer from "../../components/Footer";
 
 const MASK_IMAGE = "/rect.png";
 
@@ -160,7 +159,8 @@ export default function UEFN() {
 
   return (
     <div className="relative z-20 px-4 pb-40 text-white">
-      <LanguageSwitcher lang={lang} setLang={setLang} />
+    <LanguageSwitcher lang={lang} setLang={setLang} />
+      <div className="h-screen" aria-hidden="true" />
 
       {/* <UefnSection isEs={isEs} /> */}
       {/* <DraggablePanels isEs={isEs} /> */}
@@ -290,7 +290,7 @@ export default function UEFN() {
           })}
         </div>
       )}
-      <Footer isEs={isEs} />
+      <div className="h-[100vh]" aria-hidden="true" />
     </div>
   );
 }

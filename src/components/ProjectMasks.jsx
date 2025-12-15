@@ -178,7 +178,7 @@ export function ProjectMasks({ isEs, variant }) {
 
   if (isMobile) {
     return (
-      <div className="mt-10 space-y-6">
+      <div className="pt-[100vh] pb-[100vh] space-y-6">
         {MASK_TEMPLATES.map((tpl, index) => {
           const slot = items[index];
           if (!slot) return null;
@@ -208,13 +208,14 @@ export function ProjectMasks({ isEs, variant }) {
   }
 
   return (
-    <div
-      ref={wrapRef}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerLeave={onPointerUp}
-      className="relative z-10 w-full min-h-[300vh]"
-    >
+    <div>
+      <div
+        ref={wrapRef}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerUp}
+        className="relative z-10 w-full min-h-[300vh]"
+      >
       {sortedMasks.map((m) => {
         const wPx = (wrapRect.w * m.wPct) / 100;
         const hPx = (wrapRect.w * m.hPct) / 100;
@@ -294,6 +295,7 @@ export function ProjectMasks({ isEs, variant }) {
           </div>
         );
       })}
+      </div>
     </div>
   );
 }

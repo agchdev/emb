@@ -5,7 +5,6 @@ import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 import { MusicSection } from "../../components/MusicSection";
 import { DraggablePanels } from "../../components/DraggablePanels";
 import { ProjectMasks } from "../../components/ProjectMasks";
-import Footer from "../../components/Footer";
 
 export default function MUSIC() {
   const [lang, setLang] = useState("en");
@@ -14,12 +13,13 @@ export default function MUSIC() {
   return (
     <div className="relative z-20 px-6 pb-40 text-white">
       <LanguageSwitcher lang={lang} setLang={setLang} />
+      <div className="h-screen" aria-hidden="true" />
       {/* <MusicSection isEs={isEs} /> */}
       {/* <DraggablePanels isEs={isEs} /> */}
       <ProjectMasks isEs={isEs} variant="music" />
       <MusicSection isEs={isEs} />
       <DraggablePanels isEs={isEs} />
-      <Footer isEs={isEs} />
+      <div className="h-screen" aria-hidden="true" />
     </div>
   );
 }

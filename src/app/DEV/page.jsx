@@ -5,7 +5,6 @@ import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 import { DevSection } from "../../components/DevSection";
 import { DraggablePanels } from "../../components/DraggablePanels";
 import { ProjectMasks } from "../../components/ProjectMasks";
-import Footer from "../../components/Footer";
 
 export default function DEV() {
   const [lang, setLang] = useState("en");
@@ -16,9 +15,9 @@ export default function DEV() {
       <LanguageSwitcher lang={lang} setLang={setLang} />
       {/* <DevSection isEs={isEs} /> */}
       <ProjectMasks isEs={isEs} variant="dev" />
-      <DevSection isEs={isEs} />
-      <DraggablePanels isEs={isEs} />
-      <Footer isEs={isEs} />
+      {/* <DevSection isEs={isEs} /> */}
+      {/* <DraggablePanels isEs={isEs} /> */}
+      <div className="h-screen" aria-hidden="true" />
     </div>
   );
 }

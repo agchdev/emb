@@ -39,6 +39,7 @@ export default function ClientLayout({ children }) {
       smoothWheel: true,
       smoothTouch: true,
       lerp: 0.08,
+      infinite: true,
     });
 
     let frameId;
@@ -95,6 +96,10 @@ export default function ClientLayout({ children }) {
       {isMainRoute && <SignalRail currentTarget={currentTarget} />}
 
       <div>{children}</div>
+
+      {/* Fades superior/inferior para suavizar el bucle infinito */}
+      <div className="pointer-events-none fixed inset-x-0 top-0 h-10 bg-gradient-to-b from-black to-transparent z-[1100]" />
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black to-transparent z-[1100]" />
     </>
   );
 }

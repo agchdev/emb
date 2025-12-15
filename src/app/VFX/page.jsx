@@ -5,7 +5,6 @@ import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 import { VfxSection } from "../../components/VfxSection";
 import { DraggablePanels } from "../../components/DraggablePanels";
 import { ProjectMasks } from "../../components/ProjectMasks";
-import Footer from "../../components/Footer";
 
 export default function VFX() {
   const [lang, setLang] = useState("en");
@@ -14,10 +13,11 @@ export default function VFX() {
   return (
     <div className="relative z-20 px-6 pb-40 text-white">
       <LanguageSwitcher lang={lang} setLang={setLang} />
+      <div className="h-screen" aria-hidden="true" />
       {/* <VfxSection isEs={isEs} /> */}
       {/* <DraggablePanels isEs={isEs} /> */}
       <ProjectMasks isEs={isEs} variant="vfx" />
-      <Footer isEs={isEs} />
+      <div className="h-screen" aria-hidden="true" />
     </div>
   );
 }

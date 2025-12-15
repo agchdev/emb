@@ -24,8 +24,18 @@ export default function SignalRail() {
     }
   }, [timestamp]);
 
+  const handleMailClick = () => {
+    const mailto = "mailto:embjsdevs@gmail.com?subject=Hola%20EMB";
+    // Intento primario
+    const win = window.open(mailto, "_self");
+    // Fallback por si el navegador bloquea window.open
+    setTimeout(() => {
+      if (!win) window.location.href = mailto;
+    }, 80);
+  };
+
   return (
-    <div className="pointer-events-none fixed right-4 bottom-8 z-40 hidden xl:flex text-white">
+    <div className="pointer-events-none fixed right-4 bottom-8 z-[1200] hidden xl:flex text-white">
       <div className="pointer-events-auto w-72 rounded-2xl border border-white/20 bg-white/10 px-4 py-4 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
         <div className="flex items-center justify-between gap-3 text-[11px] font-mono uppercase tracking-[0.32em] text-white/70">
           <span className="text-white">Contacto directo</span>
@@ -38,13 +48,14 @@ export default function SignalRail() {
           {/* Respuesta < 24h · UTC+1 */}
         </p>
         <div className="mt-4 flex flex-col gap-3 text-sm">
-          <a
-            href="mailto:embjsdevs@gmail.com?subject=Hola%20EMB"
-            className="flex items-center gap-2 rounded-xl border border-white/15 bg-black/40 px-3 py-2 text-white transition hover:border-white/40 hover:bg-white/10"
+          <button
+            type="button"
+            onClick={handleMailClick}
+            className="flex items-center gap-2 rounded-xl border border-white/15 bg-black/40 px-3 py-2 text-left text-white transition hover:border-white/40 hover:bg-white/10"
           >
             <Mail className="h-4 w-4 text-emerald-200" />
             <span className="text-[12px] font-semibold tracking-wide">embjsdevs@gmail.com</span>
-          </a>
+          </button>
           <a
             href="https://instagram.com/emb.js"
             target="_blank"
